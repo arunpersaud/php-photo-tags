@@ -62,8 +62,6 @@ while [ $done -lt 200 ] ; do
    if [ "x$FILES" != "x" ] ; then
      #found some files, process them
      for file in $FILES; do
-	 echo $file
-
 	 # handle white space in file names
 	 file=${file/file:\/\/$dbprefix/}
 	 file=${file//\%20/ }
