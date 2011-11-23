@@ -1,0 +1,24 @@
+
+h1 {color:red}
+body {background-color: black}
+
+.pics li { 
+  display: inline;
+  list-style: none;
+}
+
+.pics img {
+  border: 1px solid white;
+  margin: 2px;
+  height: 100px;
+}
+
+footer {
+  border-top: 1px solid grey;
+  color: #eee;
+}
+
+.copyright {
+    color: #999;
+    float:right;
+}

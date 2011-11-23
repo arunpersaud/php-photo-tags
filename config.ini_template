@@ -1,0 +1,16 @@
+; comments
+
+[DB]
+fspotdb="myphoto.db"
+origdb="/home/username/.config/f-spot-photos.db"
+dbprefix=""
+
+[local]
+dirprefix=""
+; should we remove metadata
+removemeta=0
+
+[Web]
+webbase="http://localhost/f-spot-gallery"
+admin="Some One <some.one@example.net>"
+title="Some One's Gallery"

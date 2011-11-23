@@ -1,0 +1,27 @@
+This are some simple php files and bash scripts to display your F-spot
+photos including information from the data-base on a webpage.
+
+You can exclude/include certain tags incase you want for example on
+show pictures on the web that were tagged "Public".
+
+To use the scripts copy config.ini_template to config.ini, edit it and
+then run for example
+
+f-spot-db-reduce.sh --include='Public'
+
+This will create a new smaller database that only contains information
+about pictures with the Public tag.  Next run
+
+./create_thumbnails.sh
+
+This script creates thumbnails of all pictures and save them in local
+directories. I will only create 100 pictures though, so you will need
+to run it several times. This is done, so that you can easily run it
+via cron for example every hour on a remote server without creating
+jobs that last forever.
+
+Ones this is done you can visit index.php and everything should be working.
+
+Feel free to fork, send in patches, make suggestions.
+
+Arun Persaud
