@@ -7,6 +7,13 @@ $admin=$iniarray["admin"];
 $title=$iniarray["title"];
 $N=$iniarray["pics_per_page"];
 /* end parse ini-file */
+
+/* parse flags */
+if(isset($_REQUEST["page"]))
+  $page = intval($_REQUEST["page"]);
+else
+  $page = 1;
+
 ?>
 <html>
 <title><?php echo htmlspecialchars($title) ?></title>
@@ -35,8 +42,8 @@ $N=$iniarray["pics_per_page"];
 
 var pics = d3.select(".pics").append("ul");
 
-var page=0;
-var N=<?php echo $N?>;
+var page=<?php echo $page ?>;
+var N=<?php echo $N ?>;
 var count=0;
 
 function myreload(a) {
@@ -65,7 +72,7 @@ function myreload(a) {
 }
 
 function left() {
-  if (page>=1) page=page-1;
+  if (page>=2) page=page-1;
   myreload(page);
 }
 
@@ -76,7 +83,7 @@ function right() {
 
 function checkbutton() {
 
-  if (page==0)
+  if (page==1)
     { d3.select("button.prev").attr("disabled","disabled");}
   else
     { d3.select("button.prev").attr("disabled", null);};

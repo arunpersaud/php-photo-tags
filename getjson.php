@@ -10,7 +10,7 @@ $N=$iniarray["pics_per_page"];
 /* end parse ini-file */
 
 if (isset($_REQUEST["P"]))
-  $OFFSET = "".($_REQUEST["P"]*$N).",";
+  $OFFSET = "".($_REQUEST["P"]*$N-$N).",";
 else
   $OFFSET = "";
 
