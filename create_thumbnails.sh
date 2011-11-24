@@ -54,8 +54,8 @@ done=0
 offset=0
 FILES=""
 
-while [ $done -lt 200 ] ; do
-   echo "skipping $offset pics, getting 100 new pics to work on..."
+while [ $done -lt 100 ] ; do
+   echo "skipping $offset pics, getting 50 new pics to work on..."
    # handle white space in filename correctly
    FILES=`sqlite3 $LOCALDB "select replace(base_uri||'/'||filename,' ','%20') from photos limit $offset,100"`
    
@@ -98,5 +98,5 @@ while [ $done -lt 200 ] ; do
    fi
 
    #get ready to get the next 100
-   offset=$((offset+100))
+   offset=$((offset+50))
 done

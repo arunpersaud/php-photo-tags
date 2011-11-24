@@ -15,10 +15,10 @@ about pictures with the Public tag.  Next run
 ./create_thumbnails.sh
 
 This script creates thumbnails of all pictures and save them in local
-directories. I will only create 100 pictures though, so you will need
-to run it several times. This is done, so that you can easily run it
-via cron for example every hour on a remote server without creating
-jobs that last forever.
+directories. I will only create 50 pictures at a time though, so you
+will need to run it several times. This is done, so that you limit the
+time this tasks run, so that it doesn't get shut down on for example
+rented web-space where execcive CPU uses is an issue.
 
 Ones this is done you can visit index.php and everything should be working.
 
