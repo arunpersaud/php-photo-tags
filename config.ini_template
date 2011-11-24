@@ -4,6 +4,7 @@
 fspotdb="myphoto.db"
 origdb="/home/username/.config/f-spot-photos.db"
 dbprefix=""
+usePDO=0
 
 [local]
 dirprefix=""

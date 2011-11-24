@@ -3,6 +3,7 @@
 /* parse ini -file */
 $iniarray=parse_ini_file("config.ini");
 $DBFILE=$iniarray["fspotdb"];
+$usePDO=$iniarray["usePDO"];
 /* end parse ini-file */
 
 if (isset($_REQUEST["O"]))
@@ -15,18 +16,29 @@ if (isset($_REQUEST["N"]))
 else
   $N= 25;
 
-$DB = new SQlite3($DBFILE);
+if($usePDO)
+  $DB = new PDO("sqlite:$DBFILE");
+else
+  $DB = new SQlite3($DBFILE);
 
 $result = $DB->query("SELECT * FROM photos LIMIT $O $N");
-
-sqlite_close(DB);
 
 $row = array();
 
 $i = 0;
 
-while($res = $result->fetchArray(SQLITE3_ASSOC)){
-    
+if(!$usePDO)
+  {
+    /* convert results into array */
+    $tmp=array();
+    while($res = $result->fetchArray(SQLITE3_ASSOC)){
+      $tmp[]=$res;
+    }
+    $result=$tmp;
+  }
+
+foreach ($result as $res){
+
   $row[$i] = $res;
  
   $i++;
@@ -35,6 +47,12 @@ while($res = $result->fetchArray(SQLITE3_ASSOC)){
 
 
 echo json_encode($row);
+
+/* close the database */
+if($usePDO)
+  $DB=null;
+else
+  sqlite_close($DB);
 
 ?>
 
