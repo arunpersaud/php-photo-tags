@@ -1,27 +1,25 @@
 <?php
 
+$N=30;
+
 /* parse ini -file */
 $iniarray=parse_ini_file("config.ini");
 $DBFILE=$iniarray["fspotdb"];
 $usePDO=$iniarray["usePDO"];
+$N=$iniarray["pics_per_page"];
 /* end parse ini-file */
 
-if (isset($_REQUEST["O"]))
-  $O = "".$_REQUEST["O"].",";
+if (isset($_REQUEST["P"]))
+  $OFFSET = "".($_REQUEST["P"]*$N).",";
 else
-  $O="";
-
-if (isset($_REQUEST["N"]))
-  $N = "".$_REQUEST["N"];
-else
-  $N= 25;
+  $OFFSET = "";
 
 if($usePDO)
   $DB = new PDO("sqlite:$DBFILE");
 else
   $DB = new SQlite3($DBFILE);
 
-$result = $DB->query("SELECT * FROM photos LIMIT $O $N");
+$result = $DB->query("SELECT * FROM photos LIMIT $OFFSET $N");
 
 $row = array();
 
@@ -37,13 +35,11 @@ if(!$usePDO)
     $result=$tmp;
   }
 
-foreach ($result as $res){
-
+foreach ($result as $res)
+{
   $row[$i] = $res;
- 
   $i++;
-  
- }
+}
 
 
 echo json_encode($row);

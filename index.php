@@ -5,6 +5,7 @@ $webbase=$iniarray["webbase"];
 $dbprefix=$iniarray["dbprefix"];
 $admin=$iniarray["admin"];
 $title=$iniarray["title"];
+$N=$iniarray["pics_per_page"];
 /* end parse ini-file */
 ?>
 <html>
@@ -34,12 +35,12 @@ $title=$iniarray["title"];
 
 var pics = d3.select(".pics").append("ul");
 
-var offset=0;
-var N=30;
+var page=0;
+var N=<?php echo $N?>;
 var count=0;
 
-function myreload(a,b) {
-  d3.json("<?php echo $webbase?>/getjson.php?O="+a+"&N="+b, function(json) {
+function myreload(a) {
+  d3.json("<?php echo $webbase?>/getjson.php?P="+a, function(json) {
       count=0;
       pics.selectAll("li").remove();
       pics.selectAll("li").data(json)
@@ -60,22 +61,22 @@ function myreload(a,b) {
       checkbutton();
     });
 
-  d3.select(".debug").text("O, N= "+a+" "+b+" "+count);
+  d3.select(".debug").text("P, count= "+a+" "+count);
 }
 
 function left() {
-  if (offset>=N) offset=offset-N;
-  myreload(offset,N);
+  if (page>=1) page=page-1;
+  myreload(page);
 }
 
 function right() {
-  offset=offset+N;
-  myreload(offset,N);
+  page=page+1;
+  myreload(page);
 }
 
 function checkbutton() {
 
-  if (offset==0)
+  if (page==0)
     { d3.select("button.prev").attr("disabled","disabled");}
   else
     { d3.select("button.prev").attr("disabled", null);};
@@ -86,7 +87,7 @@ function checkbutton() {
     { d3.select("button.next").attr("disabled",null);}
 }
 
-myreload(offset,N);
+myreload(page);
 
 </script>
 

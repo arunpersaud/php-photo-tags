@@ -15,3 +15,4 @@ removemeta=0
 webbase="http://localhost/f-spot-gallery"
 admin="Some One <some.one@example.net>"
 title="Some One's Gallery"
+pics_per_page=30
