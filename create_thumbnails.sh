@@ -1,5 +1,7 @@
 #!/bin/bash
 
+NICE="nice -19"
+
 # init some variables
 removemeta=0
 
@@ -57,7 +59,7 @@ FILES=""
 while [ $done -lt 100 ] ; do
    echo "skipping $offset pics, getting 50 new pics to work on..."
    # handle white space in filename correctly
-   FILES=`sqlite3 $LOCALDB "select replace(base_uri||'/'||filename,' ','%20') from photos limit $offset,100"`
+   FILES=`$NICE sqlite3 $LOCALDB "select replace(base_uri||'/'||filename,' ','%20') from photos limit $offset,100"`
    
    if [ "x$FILES" != "x" ] ; then
      #found some files, process them
@@ -70,23 +72,23 @@ while [ $done -lt 100 ] ; do
 	 
 	 if [ ! -s "Photos-tiny/$dir/$base" ] ; then
 	     mkdir -p Photos-tiny/$dir
-	     nice -19 convert "$dirprefix/$file" -auto-orient -resize x100 -quality 80% "Photos-tiny/$dir/$base"
+	     $NICE convert "$dirprefix/$file" -auto-orient -resize x100 -quality 80% "Photos-tiny/$dir/$base"
 	     if [ $removemeta=1 ]; then
-		 jhead -q -se -purejpg "Photos-tiny/$dir/$base"
-		 jhead -q -se -dt "Photos-tiny/$dir/$base"
-		 jhead -q -se -mkexif "Photos-tiny/$dir/$base"
-		 jhead -q -se -cl "This photo belongs to $admin and was taken from $webbase. If you want to use this photo, please contact him." "Photos-tiny/$dir/$base"
+		 $NICE jhead -q -se -purejpg "Photos-tiny/$dir/$base"
+		 $NICE jhead -q -se -dt "Photos-tiny/$dir/$base"
+		 $NICE jhead -q -se -mkexif "Photos-tiny/$dir/$base"
+		 $NICE jhead -q -se -cl "This photo belongs to $admin and was taken from $webbase. If you want to use this photo, please contact him." "Photos-tiny/$dir/$base"
 	     fi
 	     done=$((done+1))
 	 fi 
 	 if [ ! -s "Photos-small/$dir/$base" ] ; then
 	     mkdir -p Photos-small/$dir
-	     nice -19 convert "$dirprefix/$file" -auto-orient -resize x600 -quality 80% "Photos-small/$dir/$base"
+	     $NICE convert "$dirprefix/$file" -auto-orient -resize x600 -quality 80% "Photos-small/$dir/$base"
 	     if [ $removemeta=1 ]; then
-		 jhead -q -se -purejpg "Photos-small/$dir/$base"
-		 jhead -q -se -dt "Photos-small/$dir/$base"
-		 jhead -q -se -mkexif "Photos-small/$dir/$base"
-		 jhead -q -se -cl "This photo belongs to $admin and was taken from $webbase. If you want to use this photo, please contact him." "Photos-small/$dir/$base"
+		 $NICE jhead -q -se -purejpg "Photos-small/$dir/$base"
+		 $NICE jhead -q -se -dt "Photos-small/$dir/$base"
+		 $NICE jhead -q -se -mkexif "Photos-small/$dir/$base"
+		 $NICE jhead -q -se -cl "This photo belongs to $admin and was taken from $webbase. If you want to use this photo, please contact him." "Photos-small/$dir/$base"
 	     fi
 	     done=$((done+1))
 	 fi 
