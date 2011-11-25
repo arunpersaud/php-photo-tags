@@ -9,46 +9,53 @@ $usePDO=$iniarray["usePDO"];
 $N=$iniarray["pics_per_page"];
 /* end parse ini-file */
 
-if (isset($_REQUEST["P"]))
-  $OFFSET = "".($_REQUEST["P"]*$N-$N).",";
-else
-  $OFFSET = "";
-
 if($usePDO)
   $DB = new PDO("sqlite:$DBFILE");
 else
   $DB = new SQlite3($DBFILE);
 
-$result = $DB->query("SELECT * FROM photos LIMIT $OFFSET $N");
 
-$row = array();
+/* do database query */
+if (isset($_REQUEST["P"]))
+  {
+    $OFFSET = "".($_REQUEST["P"]*$N-$N);
 
-$i = 0;
+    $result = $DB->query("SELECT * FROM photos LIMIT $OFFSET, $N");
+  }
+else if (isset($_REQUEST["T"]))
+  {
+    $result = $DB->query("SELECT count(*) as total FROM photos");
+  }
+else
+  $result=null;
 
+/* encode result as an array */
+$tmp=array();
 if(!$usePDO)
   {
     /* convert results into array */
-    $tmp=array();
-    while($res = $result->fetchArray(SQLITE3_ASSOC)){
-      $tmp[]=$res;
-    }
-    $result=$tmp;
+    while($res = $result->fetchArray(SQLITE3_ASSOC))
+      {
+	$tmp[]=$res;
+      }
   }
+else
+  {
+    foreach($result as $res)
+      {
+        $tmp[]=$res;
+      }
+  }
+$result=$tmp;
 
-foreach ($result as $res)
-{
-  $row[$i] = $res;
-  $i++;
-}
-
-
-echo json_encode($row);
+echo json_encode($result);
 
 /* close the database */
 if($usePDO)
   $DB=null;
 else
   $DB->close();
+
 
 ?>
 

@@ -30,7 +30,7 @@ else
 <button class="next"   onclick="right()">next </button>
 
 <div class="permalink"></div>
-
+<div class="index"></div>
 <div class="pics"> </div>
 
 <footer>
@@ -49,6 +49,15 @@ var N=<?php echo $N ?>;
 var count=0;
 
 function myreload(a) {
+  d3.json("<?php echo $webbase?>/getjson.php?T=1", function(json) {
+      s="page ";
+      n = json[0].total/N;
+      for(i=1;i<=n+1;i++)
+	{
+	  s+=" <a href=\"<?php echo $webbase?>/page/"+i+"\">"+i+"</a>";
+	}
+      d3.select(".index").html(s);
+    });
   d3.json("<?php echo $webbase?>/getjson.php?P="+a, function(json) {
       count=0;
       pics.selectAll("li").remove();
@@ -72,7 +81,7 @@ function myreload(a) {
 
   permalink="<?php echo $webbase ?>/page/"+page;
   d3.select(".permalink").html("Permalink: <a href=\""+permalink+"\">"+permalink+"</a>");
-  d3.select(".debug").text("P, count= "+a+" "+count);
+  d3.select(".debug").text("P,N ="+a+" "+N);
 }
 
 function left() {

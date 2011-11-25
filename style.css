@@ -1,6 +1,9 @@
 
 h1 {color:red}
-body {background-color: black}
+body {
+    background-color: black;
+    color: #eee;
+}
 
 .permalink {
     float:right;
@@ -9,6 +12,11 @@ body {background-color: black}
 }
 
 a[visited]{ color: #aaa;}
+
+.index {
+    margin: 0 auto;
+    width:70%;
+}
 
 .pics li { 
   display: inline;
@@ -30,3 +38,6 @@ footer {
     color: #999;
     float:right;
 }
+
+
+.debug { position: absolute; top:0; left:0}
