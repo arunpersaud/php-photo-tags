@@ -1,7 +1,8 @@
 This are some simple php files and bash scripts to display your F-spot
-photos including information from the data-base on a webpage.
+photos including information from the data-base on a webpage. To get
+up and running follow these steps:
 
-You can exclude/include certain tags incase you want for example on
+1) You can exclude/include certain tags incase you want for example on
 show pictures on the web that were tagged "Public".
 
 To use the scripts copy config.ini_template to config.ini, edit it and
@@ -10,7 +11,9 @@ then run for example
 f-spot-db-reduce.sh --include='Public'
 
 This will create a new smaller database that only contains information
-about pictures with the Public tag.  Next run
+about pictures with the Public tag. 
+
+2)  Next run
 
 ./create_thumbnails.sh
 
@@ -20,7 +23,10 @@ will need to run it several times. This is done, so that you limit the
 time this tasks run, so that it doesn't get shut down on for example
 rented web-space where execcive CPU uses is an issue.
 
-Ones this is done you can visit index.php and everything should be working.
+3) install .htaccess
+
+edit the "RewriteBase" in the .htaccess_template file and rename it to .htaccess.
+Onces this is done you can visit index.php and everything should be working.
 
 Feel free to fork, send in patches, make suggestions.
 

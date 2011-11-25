@@ -17,9 +17,9 @@ else
 ?>
 <html>
 <title><?php echo htmlspecialchars($title) ?></title>
-<script src="d3.min.js"></script>
-<link rel="stylesheet" type="text/css" href="normalize.css" />
-<link rel="stylesheet" type="text/css" href="style.css" />
+<script src="<?php echo $webbase?>/d3.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $webbase?>/normalize.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $webbase?>/style.css" />
 
 <body>
 
@@ -28,6 +28,8 @@ else
 
 <button class="prev" disabled="disabled" onclick="left()"> prev </button>
 <button class="next"   onclick="right()">next </button>
+
+<div class="permalink"></div>
 
 <div class="pics"> </div>
 
@@ -68,6 +70,8 @@ function myreload(a) {
       checkbutton();
     });
 
+  permalink="<?php echo $webbase ?>/page/"+page;
+  d3.select(".permalink").html("Permalink: <a href=\""+permalink+"\">"+permalink+"</a>");
   d3.select(".debug").text("P, count= "+a+" "+count);
 }
 
