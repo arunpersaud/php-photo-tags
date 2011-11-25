@@ -48,7 +48,7 @@ echo json_encode($row);
 if($usePDO)
   $DB=null;
 else
-  sqlite_close($DB);
+  $DB->close();
 
 ?>
 
