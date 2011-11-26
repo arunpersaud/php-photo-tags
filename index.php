@@ -14,6 +14,11 @@ if(isset($_REQUEST["page"]))
 else
   $page = 1;
 
+if(isset($_REQUEST["tag"]))
+  $tags = $_REQUEST["tag"];
+else
+  $tags = "";
+
 ?>
 <html>
 <title><?php echo htmlspecialchars($title) ?></title>
@@ -30,6 +35,15 @@ else
 <button class="next"   onclick="right()">next </button>
 
 <div class="permalink"></div>
+
+<div class="tagsearch">
+<form method="get" action="">
+ Tags: <input list="MyTags" id="MyTagsInput" type="text" value="" />
+  <datalist id="MyTags">
+  </datalist>
+</form>
+</div>
+
 <div class="index"></div>
 <div class="pics"> </div>
 
@@ -41,27 +55,51 @@ else
 
 <script type="text/javascript" >
 
-
 var pics = d3.select(".pics").append("ul");
 
 var page=<?php echo $page ?>;
 var N=<?php echo $N ?>;
+var T="<?php echo $tags ?>";
 var count=0;
 
+/* populate data list with tags*/
+d3.json("<?php echo $webbase?>/getjson.php?S", function(json) {
+    d3.select("#MyTags").selectAll("option").data(json)
+      .enter().append("option").attr("value",function(d) {return d.name});
+  });
+
+/* update form to point to new link */
+d3.select("input").on("keyup", function(d) {
+    d3.select('form').attr("action","<?php echo $webbase?>/tag/"+document.getElementById('MyTagsInput').value);
+});
+
 function myreload(a) {
-  d3.json("<?php echo $webbase?>/getjson.php?T=1", function(json) {
+  d3.select(".debug").text("T,P,N ="+T+" "+a+" "+N);
+
+  if(T!="")
+    url = "<?php echo $webbase?>/getjson.php?T="+T+"&P="+a;
+  else
+    url = "<?php echo $webbase?>/getjson.php?P="+a;
+
+  d3.json(url, function(json) {
+
+      /* update index */
       s="page ";
-      n = json[0].total/N;
+      n = json[0][0].total/N;
       for(i=1;i<=n+1;i++)
 	{
-	  s+=" <a href=\"<?php echo $webbase?>/page/"+i+"\">"+i+"</a>";
+	  s+=" <a href=\"<?php echo $webbase?>";
+	  if(T!="")
+	    s+="/tag/"+T;
+	  s+="/page/"+i+"\">"+i+"</a>";
 	}
       d3.select(".index").html(s);
-    });
-  d3.json("<?php echo $webbase?>/getjson.php?P="+a, function(json) {
+
+      /* update pics */
       count=0;
       pics.selectAll("li").remove();
-      pics.selectAll("li").data(json)
+      picdata=json[1];
+      pics.selectAll("li").data(picdata)
 	.enter().append("li")
 	.append("a")
 	.attr("href",function(d) {
@@ -81,7 +119,6 @@ function myreload(a) {
 
   permalink="<?php echo $webbase ?>/page/"+page;
   d3.select(".permalink").html("Permalink: <a href=\""+permalink+"\">"+permalink+"</a>");
-  d3.select(".debug").text("P,N ="+a+" "+N);
 }
 
 function left() {
