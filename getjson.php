@@ -42,12 +42,12 @@ else
 	$result = $DB->query("SELECT base_uri, filename FROM photos ".
 			     "    left join photo_tags on photos.id=photo_tags.photo_id ".
 			     "    left join tags on tags.id=photo_tags.tag_id ".
-			     "    where tags.name in ($tags) LIMIT $OFFSET, $N");
+			     "    where tags.name COLLATE NOCASE in ($tags) LIMIT $OFFSET, $N");
 
 	$count = $DB->query("SELECT count(*) as total FROM photos ".
 			    "    left join photo_tags on photos.id=photo_tags.photo_id ".
 			    "    left join tags on tags.id=photo_tags.tag_id ".
-			    "    where tags.name in ($tags)");
+			    "    where tags.name COLLATE NOCASE in ($tags)");
 
       }
     else
