@@ -64,7 +64,7 @@ var count=0;
 
 /* populate data list with tags*/
 d3.json("<?php echo $webbase?>/getjson.php?S", function(json) {
-    d3.select("#MyTags").selectAll("option").data(json)
+    d3.select("#MyTags").selectAll("option").data(json[1])
       .enter().append("option").attr("value",function(d) {return d.name});
   });
 

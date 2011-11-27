@@ -20,8 +20,8 @@ if (isset($_REQUEST["S"]))
   {
     /* single tag or part of tag */
     $tag = sqlite_escape_string($_REQUEST["S"]);
-    /* individual tags are separated by '+' */
-    $result = $DB->query("SELECT name FROM tags where name like \"%$tag%\"");
+
+    $result = $DB->query("SELECT name FROM tags");
     $count = $DB->query("SELECT 1");
   }
 else
