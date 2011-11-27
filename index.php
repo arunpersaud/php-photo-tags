@@ -70,7 +70,7 @@ d3.json("<?php echo $webbase?>/getjson.php?S", function(json) {
 
 /* update form to point to new link */
 d3.select("input").on("keyup", function(d) {
-    d3.select('form').attr("action","<?php echo $webbase?>/tag/"+document.getElementById('MyTagsInput').value);
+    d3.select('form').attr("action","<?php echo $webbase?>/tag/"+document.getElementById('MyTagsInput').value.replace(" ","+"));
 });
 
 function myreload(a) {
