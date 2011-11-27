@@ -84,49 +84,52 @@ function myreload(a) {
   d3.json(url, function(json) {
 
       /* update index, show only page +-5 pages max */
-      s="page ";
       n = Math.floor(json[0][0].total/N);
+      s = "";
 
-      if(a>7)
+      if(n>1)
 	{
-	  s+=" <a href=\"<?php echo $webbase?>";
-	  if(T!="")
-	    s+="/tag/"+T;
-	  s+="/page/1\">1</a>...";
-	  start = a-5;
-	}
-      else
-	start=1;
+	  s="page ";
 
-      for(i=start;i<=Math.min(n+1,a+5);i++)
-	{
-	  if(i==a)
-	    s+= " "+i+" ";
-	  else
+	  if(a>7)
 	    {
 	      s+=" <a href=\"<?php echo $webbase?>";
 	      if(T!="")
 		s+="/tag/"+T;
-	      s+="/page/"+i+"\">"+i+"</a>";
+	      s+="/page/1\">1</a>...";
+	      start = a-5;
 	    }
-	}
+	  else
+	    start=1;
 
-      if(a+5<n)
-	{
-	  s+="... <a href=\"<?php echo $webbase?>";
-	  if(T!="")
-	    s+="/tag/"+T;
-	  s+="/page/"+(n+1)+"\">"+(n+1)+"</a>";
-	}
-      else if(a+5==n)
-	{
-	  s+=" <a href=\"<?php echo $webbase?>";
-	  if(T!="")
-	    s+="/tag/"+T;
-	  s+="/page/"+(n+1)+"\">"+(n+1)+"</a>";
+	  for(i=start;i<=Math.min(n+1,a+5);i++)
+	    {
+	      if(i==a)
+		s+= " "+i+" ";
+	      else
+		{
+		  s+=" <a href=\"<?php echo $webbase?>";
+		  if(T!="")
+		    s+="/tag/"+T;
+		  s+="/page/"+i+"\">"+i+"</a>";
+		}
+	    }
+
+	  if(a+5<n)
+	    {
+	      s+="... <a href=\"<?php echo $webbase?>";
+	      if(T!="")
+		s+="/tag/"+T;
+	      s+="/page/"+(n+1)+"\">"+(n+1)+"</a>";
+	    }
+	  else if(a+5==n)
+	    {
+	      s+=" <a href=\"<?php echo $webbase?>";
+	      if(T!="")
+		s+="/tag/"+T;
+	      s+="/page/"+(n+1)+"\">"+(n+1)+"</a>";
+	    };
 	};
-
-
       d3.select(".index").html(s);
 
       /* update pics */
