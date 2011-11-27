@@ -83,16 +83,50 @@ function myreload(a) {
 
   d3.json(url, function(json) {
 
-      /* update index */
+      /* update index, show only page +-5 pages max */
       s="page ";
-      n = json[0][0].total/N;
-      for(i=1;i<=n+1;i++)
+      n = Math.floor(json[0][0].total/N);
+
+      if(a>7)
 	{
 	  s+=" <a href=\"<?php echo $webbase?>";
 	  if(T!="")
 	    s+="/tag/"+T;
-	  s+="/page/"+i+"\">"+i+"</a>";
+	  s+="/page/1\">1</a>...";
+	  start = a-5;
 	}
+      else
+	start=1;
+
+      for(i=start;i<=Math.min(n+1,a+5);i++)
+	{
+	  if(i==a)
+	    s+= " "+i+" ";
+	  else
+	    {
+	      s+=" <a href=\"<?php echo $webbase?>";
+	      if(T!="")
+		s+="/tag/"+T;
+	      s+="/page/"+i+"\">"+i+"</a>";
+	    }
+	}
+
+      if(a+5<n)
+	{
+	  s+="... <a href=\"<?php echo $webbase?>";
+	  if(T!="")
+	    s+="/tag/"+T;
+	  s+="/page/"+(n+1)+"\">"+(n+1)+"</a>";
+	}
+      else if(a+5==n)
+	{
+	  s+=" <a href=\"<?php echo $webbase?>";
+	  if(T!="")
+	    s+="/tag/"+T;
+	  s+="/page/"+(n+1)+"\">"+(n+1)+"</a>";
+	};
+
+
       d3.select(".index").html(s);
 
       /* update pics */
