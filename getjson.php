@@ -19,7 +19,7 @@ else
 if (isset($_REQUEST["S"]))
   {
     /* single tag or part of tag */
-    $tag = $_REQUEST["S"];
+    $tag = sqlite_escape_string($_REQUEST["S"]);
     /* individual tags are separated by '+' */
     $result = $DB->query("SELECT name FROM tags where name like \"%$tag%\"");
     $count = $DB->query("SELECT 1");
@@ -27,14 +27,14 @@ if (isset($_REQUEST["S"]))
 else
   {
     if (isset($_REQUEST["P"]))
-      $OFFSET = "".($_REQUEST["P"]*$N-$N);
+      $OFFSET = "".(intval($_REQUEST["P"])*$N-$N);
     else
       $OFFSET = "0";
 
     if (isset($_REQUEST["T"]))
       {
 	/* single tag or part of tag */
-	$tags = $_REQUEST["T"];
+	$tags = sqlite_escape_string($_REQUEST["T"]);
 	$tags = explode("+",$tags);
 	$tags = "'".implode("','",$tags)."'";
 

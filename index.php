@@ -15,7 +15,7 @@ else
   $page = 1;
 
 if(isset($_REQUEST["tag"]))
-  $tags = $_REQUEST["tag"];
+  $tags = htmlentities($_REQUEST["tag"]);
 else
   $tags = "";
 
