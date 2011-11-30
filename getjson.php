@@ -36,21 +36,30 @@ else
 	/* single tag or part of tag */
 	$tags = $_REQUEST["T"];
 	$tags = explode(",",$tags);
+	$nrtags = count($tags);
 	foreach ($tags as $key => $value)
 	  $tags[$key]=sqlite_escape_string(trim($value));
 	$tags = "'".implode("','",$tags)."'";
 
 	/* individual tags are seperated by ',' */
-	$result = $DB->query("SELECT base_uri, filename FROM photos ".
-			     "    left join photo_tags on photos.id=photo_tags.photo_id ".
-			     "    left join tags on tags.id=photo_tags.tag_id ".
-			     "    where tags.name COLLATE NOCASE in ($tags) LIMIT $OFFSET, $N");
 
-	$count = $DB->query("SELECT count(*) as total FROM photos ".
-			    "    left join photo_tags on photos.id=photo_tags.photo_id ".
-			    "    left join tags on tags.id=photo_tags.tag_id ".
-			    "    where tags.name COLLATE NOCASE in ($tags)");
+	/* use and AND query between tags as a default
+	 a good explanation on different ways of doing this can be found at:
+	 http://www.pui.ch/phred/archives/2005/04/tags-database-schemas.html
+	*/
+	$result = $DB->query("SELECT base_uri, filename  FROM photo_tags pt, photos p, tags t".
+			     " WHERE pt.tag_id = t.id".
+			     " AND (t.name COLLATE NOCASE IN ($tags))".
+			     " AND p.id = pt.photo_id ".
+			     " GROUP BY p.id HAVING COUNT( p.id )=$nrtags".
+			     "    LIMIT $OFFSET, $N");
 
+	$count = $DB->query("SELECT count(*) as total  FROM photo_tags pt, photos p, tags t".
+			     " WHERE pt.tag_id = t.id".
+			     " AND (t.name COLLATE NOCASE IN ($tags))".
+			     " AND p.id = pt.photo_id ".
+			     " GROUP BY p.id HAVING COUNT( p.id )=$nrtags".
+			     "    LIMIT $OFFSET, $N");
       }
     else
       {
