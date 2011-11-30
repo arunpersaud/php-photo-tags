@@ -34,11 +34,13 @@ else
     if (isset($_REQUEST["T"]))
       {
 	/* single tag or part of tag */
-	$tags = sqlite_escape_string($_REQUEST["T"]);
-	$tags = explode("+",$tags);
+	$tags = $_REQUEST["T"];
+	$tags = explode(",",$tags);
+	foreach ($tags as $key => $value)
+	  $tags[$key]=sqlite_escape_string(trim($value));
 	$tags = "'".implode("','",$tags)."'";
 
-	/* individual tags are seperated by '+' */
+	/* individual tags are seperated by ',' */
 	$result = $DB->query("SELECT base_uri, filename FROM photos ".
 			     "    left join photo_tags on photos.id=photo_tags.photo_id ".
 			     "    left join tags on tags.id=photo_tags.tag_id ".
