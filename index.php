@@ -49,7 +49,7 @@ else
 
 <footer>
   This gallery belongs to <?php echo htmlspecialchars($admin) ?>.
-  <div class="copyright"> code: copyright 2011 Arun Persaud arun@nubati.net, code available at nubati.net/git/f-spot-gallery</div>
+  <div class="copyright"> photo-tags: copyright 2011 Arun Persaud arun@nubati.net, code available at <a href="http://source.nubati.net/projects/photo-tags">source.nubati.net/projects/photo-tags</a></div>
 </footer>
 
 
