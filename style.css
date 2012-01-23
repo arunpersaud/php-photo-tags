@@ -1,5 +1,9 @@
 
-h1 {color:red}
+h1 {
+    color:red;
+    margin: 1em 0;
+    text-align: center;
+}
 body {
     background-color: black;
     color: #eee;
@@ -14,11 +18,13 @@ body {
 a[visited]{ color: #aaa;}
 
 .index {
-    margin: 0 auto;
-    width:70%;
+    margin: 0 10px;
+}
+nav {
+    text-align: center;
 }
 
-.pics li { 
+.pics li {
   display: inline;
   list-style: none;
 }
@@ -27,6 +33,12 @@ a[visited]{ color: #aaa;}
   border: 1px solid white;
   margin: 2px;
   height: 100px;
+}
+
+.pics img.large{
+  border: 1px solid white;
+  margin: 2px;
+  height: 500px;
 }
 
 footer {
