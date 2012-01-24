@@ -29,6 +29,12 @@ if (isset($_REQUEST["S"]))
     $result = $DB->query("SELECT base_uri, filename, id FROM photos".
 			 " WHERE id=$id");
   }
+ else if (isset($_REQUEST["CLOUD"]))
+  {
+    $result = $DB->query("SELECT t.name as name, count(*) as count FROM photo_tags pt ".
+			 " LEFT JOIN tags t on t.id=pt.tag_id".
+			 " GROUP BY t.id");
+  }
  else
   {
     if (isset($_REQUEST["P"]))

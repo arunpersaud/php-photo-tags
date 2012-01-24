@@ -55,6 +55,7 @@ else
   </datalist>
 </form>
   Current tags:<span id="currenttags"></span>
+  <button class="next" type="button" onclick="cloud()">tag cloud</button>
 </div>
 
 <div class="pics"> </div>
@@ -178,6 +179,26 @@ function left() {
 function right() {
   page=page+1;
   load_content(page);
+}
+
+function cloud() {
+
+  url = "<?php echo $webbase?>/getjson.php?CLOUD=1";
+
+  pics.selectAll("li").remove();
+
+  var svgelement=pics.append("li")
+    .append("svg").attr("width",400).attr("height",400);
+
+  /* update pics */
+  d3.json(url, function(json) {
+      svgelement.selectAll("text").data(json).enter().append("text")
+	.style("font-size", function(d){return Math.log(d.count+1)+"em"})
+	.text(function(d) { return d.name; })
+	.on("mouseover", function(d){ d3.select(this).style("color","red")} )
+	.on("mouseout", function(d){ d3.select(this).style("color","white")} )
+	.on("click", function(d) { document.location.href='<?php echo $webbase?>/tag/'+d.name })
+    });
 }
 
 function checkbutton()
