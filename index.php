@@ -193,8 +193,8 @@ function cloud() {
   /* update pics */
   d3.json(url, function(json) {
       svgelement.selectAll("text").data(json).enter().append("text")
-	.style("font-size", function(d){return Math.log(d.count+1)+"em"})
-	.text(function(d) { return d.name; })
+	.style("font-size", function(d){return (Math.log(d.count+1)/2.0)+"em"})
+	.text(function(d) { return d.name+" "; })
 	.on("mouseover", function(d){ d3.select(this).style("color","red")} )
 	.on("mouseout", function(d){ d3.select(this).style("color","white")} )
 	.on("click", function(d) { document.location.href='<?php echo $webbase?>/tag/'+d.name })
