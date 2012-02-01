@@ -36,7 +36,7 @@ else
 
 <body>
 
-<div class="debug">test</div>
+<div class="debug"></div>
 <h1><?php echo htmlspecialchars($title) ?></h1>
 
 <nav>
