@@ -23,6 +23,48 @@ if (isset($_REQUEST["S"]))
 
     $result = $DB->query("SELECT name FROM tags");
   }
+ else if (isset($_REQUEST["NP"]))
+  {
+    /* get +- 5 pics from ordered list to show next to a large image */
+
+    /* first create a temp table with all images and then use rowid to get +-5 images */
+
+    if (isset($_REQUEST["T"]))
+      {
+	/* single tag or part of tag */
+	$tags = $_REQUEST["T"];
+	$tags = explode(",",$tags);
+	$nrtags = count($tags);
+
+	foreach ($tags as $key => $value)
+	  $tags[$key]=sqlite_escape_string(trim($value));
+	$tags = "'".implode("','",$tags)."'";
+
+	$DB->query("CREATE TEMP TABLE NEXTPREV AS SELECT base_uri, filename, p.id as id  FROM photo_tags pt, photos p, tags t".
+		   " WHERE pt.tag_id = t.id".
+		   " AND (t.name COLLATE NOCASE IN ($tags))".
+		   " AND p.id = pt.photo_id ".
+		   " GROUP BY p.id HAVING COUNT( p.id )=$nrtags");
+
+      }
+    else
+      {
+	$DB->query("CREATE TEMP TABLE NEXTPREV AS SELECT base_uri, filename, p.id as id FROM  photos p");
+      };
+
+    if (isset($_REQUEST["ID"]))
+      {
+	$ID=intval($_REQUEST["ID"]);
+	$result = $DB->query("SELECT * FROM NEXTPREV".
+			     " WHERE rowid > (select rowid from NEXTPREV where id=$ID) -5".
+			     "   AND rowid < (select rowid from NEXTPREV where id=$ID) +5");
+      }
+    else
+      {
+	$result = $DB->query("SELECT 1 where 1=2");
+      }
+
+  }
  else if (isset($_REQUEST["ID"]))
   {
     $id  = intval($_REQUEST["ID"]);

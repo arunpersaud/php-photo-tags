@@ -58,7 +58,9 @@ else
   <button class="next" type="button" onclick="cloud()">tag cloud</button>
 </div>
 
-<div class="pics"> </div>
+<div class="nextprev"> <ul></ul></div>
+
+<div class="pics"><ul></ul> </div>
 
 <footer>
   This gallery belongs to <?php echo htmlspecialchars($admin) ?>.
@@ -68,7 +70,7 @@ else
 
 <script type="text/javascript" >
 
-var pics = d3.select(".pics").append("ul");
+var pics = d3.select(".pics").select("ul");
 
 var page=<?php echo $page ?>;
 var N=<?php echo $N ?>;
@@ -132,9 +134,39 @@ function load_content(a) {
 		s = s.replace('file:\/\/<?php echo "".str_replace("/","\/",$dbprefix); ?>','<?php echo $webbase?>/Photos-small/');
 		return s;
 	      });
+
+	  /* update thumbnails */
+	  if(T!="")
+	    url2 = "<?php echo $webbase?>/getjson.php?NP=1&T="+T+"&ID="+ID;
+	  else
+	    url2 = "<?php echo $webbase?>/getjson.php?NP=1&ID="+ID;
+
+	  d3.json(url2, function(json2) {
+	      var thumbs= d3.select(".nextprev").select("ul").selectAll("li").data(json2);
+	      thumbs.enter().append("li")
+		.append("a")
+		.attr("href",function(d) {
+		    s = '<?php echo $webbase; ?>';
+		    if(T!="")
+		      s = s + '/tag/' + T;
+		    s = s + '/pic/' + d.id;
+		    return s;
+		  })
+		.append("img")
+		.attr("src",function(d) {
+		    s= d.base_uri+'/'+d.filename;
+		    s = s.replace('file:\/\/<?php echo "".str_replace("/","\/",$dbprefix); ?>','<?php echo $webbase?>/Photos-tiny/');
+		    return s;
+		  });
+
+	      thumbs.exit().remove();
+
+
+	    });
 	}
       else
 	{
+	  d3.select(".nextprev").select("ul").selectAll("li").remove();
 	  pics.selectAll("li").data(picdata)
 	    .enter().append("li")
 	    .append("a")
