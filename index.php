@@ -125,15 +125,16 @@ function load_content(a) {
       /* if ID is set, just show one pictures, else create an array of pictures */
       if (ID>=0)
 	{
-	  pics.selectAll("li").data(picdata)
-	    .enter().append("li")
-	    .append("img")
+	  var singlepicspace=pics.selectAll("li").data(picdata).enter().append("li").append("div").attr("class","singlepic");
+	  singlepicspace.append("div").attr("class","left").append("img").attr("src","<?php echo $webbase?>/left.png");
+	  singlepicspace.append("img")
 	    .attr("class","large")
 	    .attr("src",function(d) {
 		s= d.base_uri+'/'+d.filename;
 		s = s.replace('file:\/\/<?php echo "".str_replace("/","\/",$dbprefix); ?>','<?php echo $webbase?>/Photos-small/');
 		return s;
 	      });
+	  singlepicspace.append("div").attr("class","right").append("img").attr("src","<?php echo $webbase?>/right.png");
 
 	  /* update thumbnails */
 	  if(T!="")
@@ -141,6 +142,9 @@ function load_content(a) {
 	  else
 	    url2 = "<?php echo $webbase?>/getjson.php?NP=1&ID="+ID;
 
+	  var IDprev=-1;
+	  var IDnext=-1;
+	  var IDcurr=-1;
 	  d3.json(url2, function(json2) {
 	      var thumbs= d3.select(".nextprev").select("ul").selectAll("li").data(json2);
 	      thumbs.enter().append("li")
@@ -150,6 +154,14 @@ function load_content(a) {
 		    if(T!="")
 		      s = s + '/tag/' + T;
 		    s = s + '/pic/' + d.id;
+
+		    if( IDcurr != ID )
+		      {
+			IDprev = IDcurr;
+			IDcurr = IDnext;
+			IDnext = d.id;
+		      }
+		    
 		    return s;
 		  })
 		.append("img")
@@ -161,6 +173,22 @@ function load_content(a) {
 
 	      thumbs.exit().remove();
 
+	      if (IDprev != -1 )
+		{
+		  s = '<?php echo $webbase; ?>';
+		  if(T!="")
+		    s = s + '/tag/' + T;
+		  s = s + '/pic/' + IDprev;
+		  d3.select(".left").on("click", function(d) { document.location.href=s })
+		}
+	      if (IDnext != -1 )
+		{
+		  s = '<?php echo $webbase; ?>';
+		  if(T!="")
+		    s = s + '/tag/' + T;
+		  s = s + '/pic/' + IDnext;
+		  d3.select(".right").on("click", function(d) { document.location.href=s })
+		}
 
 	    });
 	}
@@ -250,11 +278,15 @@ function checkbutton()
 function update_page_index(mypage)
 {
   /* load number of pictures */
+  
+  myID = "";
+  if(ID > 0)
+    myID = "&ID="+ID;
 
   if(T!="")
-    url = "<?php echo $webbase?>/getjson.php?C=1&T="+T;
+    url = "<?php echo $webbase?>/getjson.php?C=1&T="+T+myID;
   else
-    url = "<?php echo $webbase?>/getjson.php?C=1";
+    url = "<?php echo $webbase?>/getjson.php?C=1"+myID;
 
   d3.json(url, function(json) {
     /* update index, show only page +-5 pages max */
