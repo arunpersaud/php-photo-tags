@@ -50,7 +50,7 @@ else
 
 <div class="tagsearch">
 <form method="get" action="">
- Add tag: <input list="MyTags" id="MyTagsInput" type="text" value="" />
+ Search for tag: <input list="MyTags" id="MyTagsInput" type="text" value="" />
   <datalist id="MyTags">
   </datalist>
 </form>
@@ -70,8 +70,6 @@ else
 
 <script type="text/javascript" >
 
-var pics = d3.select(".pics").select("ul");
-
 var page=<?php echo $page ?>;
 var N=<?php echo $N ?>;
 var T="<?php echo $tags ?>";
@@ -79,6 +77,8 @@ var ID=<?php echo $pic ?>;
 var count=0;
 
 var webbase = "<?php echo $webbase?>";
+var pics = d3.select(".pics").select("ul");
+
 
 /* populate data list with tags*/
 d3.json(webbase+"/getjson.php?S", function(json) {
@@ -106,17 +106,17 @@ if (T!="")
     d3.select("#currenttags").append("span").text( ' none');
   };
 
-function load_content(a) {
-  //  d3.select(".debug").text("T,P,N = *"+T+"* *"+a+"* *"+N+"*");
+function load_content() {
+  d3.select(".debug").text("T,P,N = *"+T+"* *"+page+"* *"+N+"*");
 
-  update_page_index(a);
+  update_page_index();
 
   if (ID>=0)
     url = webbase+"/getjson.php?ID="+ID;
   else if(T!="")
-    url = webbase+"/getjson.php?T="+T+"&P="+a;
+    url = webbase+"/getjson.php?T="+T+"&P="+page;
   else
-    url = webbase+"/getjson.php?P="+a;
+    url = webbase+"/getjson.php?P="+page;
 
   /* update pics */
   d3.json(url, function(json) {
@@ -204,8 +204,8 @@ function load_content(a) {
 		s = webbase;
 		if(T!="")
 		  s = s + '/tag/' + T;
-		if(a!=1)
-		  s = s + '/page/' + a;
+		if(page!=1)
+		  s = s + '/page/' + page;
 		s = s + '/pic/' + d.id;
 		return s;
 	      })
@@ -221,10 +221,10 @@ function load_content(a) {
      checkbutton();
     });
 
-   update_permalink(a)
+   update_permalink()
 }
 
-function update_permalink(page) {
+function update_permalink() {
   /* update permalink */
 
   permalink = webbase;
@@ -241,12 +241,12 @@ function update_permalink(page) {
 
 function prev_page() {
   if (page>=2) page=page-1;
-  load_content(page);
+  load_content();
 }
 
 function next_page() {
   page=page+1;
-  load_content(page);
+  load_content();
 }
 
 function tagcloud() {
@@ -282,7 +282,7 @@ function checkbutton()
     { d3.select("button.next").attr("disabled",null);}
 }
 
-function update_page_index(mypage)
+function update_page_index()
 {
   /* load number of pictures */
   myID = "";
@@ -299,27 +299,29 @@ function update_page_index(mypage)
     n = Math.floor(json[0].total/N);
     nr = Math.floor( (json[0].row-1)/N); /* rowid starts at 1 not 0 */
 
-    if(nr > 0) mypage = nr+1;
+    if(nr > 0)
+      page = nr+1;
+
     s = "";
 
     if(n>0)
       {
         s="page ";
 
-        if(mypage>7)
+        if(page>7)
 	  {
 	    s+=" <a href=\""+webbase;
 	    if(T!="")
 	      s+="/tag/"+T;
 	    s+="/page/1\">1</a>...";
-	    start = mypage-5;
+	    start = page-5;
 	  }
         else
 	  start=1;
 
-        for(i=start;i<=Math.min(n+1,mypage+5);i++)
+        for(i=start;i<=Math.min(n+1,page+5);i++)
 	  {
-	    if(i==mypage)
+	    if(i==page)
 	      s+= " "+i+" ";
 	    else
 	      {
@@ -330,14 +332,14 @@ function update_page_index(mypage)
 	      }
 	  }
 
-        if(mypage+5<n)
+        if(page+5<n)
 	  {
 	    s+="... <a href=\""+webbase;
 	    if(T!="")
 	      s+="/tag/"+T;
 	    s+="/page/"+(n+1)+"\">"+(n+1)+"</a>";
 	  }
-        else if(mypage+5==n)
+        else if(page+5==n)
 	  {
 	    s+=" <a href=\""+webbase;
 	    if(T!="")
@@ -349,7 +351,7 @@ function update_page_index(mypage)
     } );
 }
 
-load_content(page);
+load_content();
 
 </script>
 
