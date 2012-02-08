@@ -41,8 +41,8 @@ else
 
 <nav>
 <span class="index"></span>
-<button class="prev" type="button" disabled="disabled" onclick="left()"> prev </button>
-<button class="next" type="button" onclick="right()">next </button>
+<button class="prev" type="button" disabled="disabled" onclick="prev_page()"> prev </button>
+<button class="next" type="button" onclick="next_page()">next </button>
 <button class="all"  type="submit" onclick="document.location.href='<?php echo $webbase?>'">all</button>
 </nav>
 
@@ -55,7 +55,7 @@ else
   </datalist>
 </form>
   Current tags:<span id="currenttags"></span>
-  <button class="next" type="button" onclick="cloud()">tag cloud</button>
+  <button class="next" type="button" onclick="tagcloud()">tag cloud</button>
 </div>
 
 <div class="nextprev"> <ul></ul></div>
@@ -239,17 +239,17 @@ function update_permalink(page) {
   d3.select(".permalink").html("Permalink: <a href=\""+permalink+"\">"+permalink+"</a>");
 }
 
-function left() {
+function prev_page() {
   if (page>=2) page=page-1;
   load_content(page);
 }
 
-function right() {
+function next_page() {
   page=page+1;
   load_content(page);
 }
 
-function cloud() {
+function tagcloud() {
 
   url = webbase+"/getjson.php?CLOUD=1";
 
@@ -271,7 +271,6 @@ function cloud() {
 
 function checkbutton()
 {
-
   if (page==1)
     { d3.select("button.prev").attr("disabled","disabled");}
   else
@@ -286,7 +285,6 @@ function checkbutton()
 function update_page_index(mypage)
 {
   /* load number of pictures */
-  
   myID = "";
   if(ID > 0)
     myID = "&ID="+ID;
@@ -299,6 +297,9 @@ function update_page_index(mypage)
   d3.json(url, function(json) {
     /* update index, show only page +-5 pages max */
     n = Math.floor(json[0].total/N);
+    nr = Math.floor( (json[0].row-1)/N); /* rowid starts at 1 not 0 */
+
+    if(nr > 0) mypage = nr+1;
     s = "";
 
     if(n>0)

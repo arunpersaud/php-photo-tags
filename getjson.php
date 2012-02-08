@@ -45,7 +45,6 @@ if (isset($_REQUEST["S"]))
 		   " AND (t.name COLLATE NOCASE IN ($tags))".
 		   " AND p.id = pt.photo_id ".
 		   " GROUP BY p.id HAVING COUNT( p.id )=$nrtags");
-
       }
     else
       {
@@ -65,7 +64,7 @@ if (isset($_REQUEST["S"]))
       }
 
   }
- else if (isset($_REQUEST["ID"]))
+ else if (isset($_REQUEST["ID"]) && !isset($_REQUEST["C"]))
   {
     $id  = intval($_REQUEST["ID"]);
     $result = $DB->query("SELECT base_uri, filename, id FROM photos".
@@ -104,11 +103,19 @@ if (isset($_REQUEST["S"]))
 
 	if (isset($_REQUEST["C"]))
 	  {
-	    $result = $DB->query("SELECT count(*) as total from (SELECT p.id FROM photo_tags pt, photos p, tags t".
-				" WHERE pt.tag_id = t.id".
-				" AND (t.name COLLATE NOCASE IN ($tags))".
-				" AND p.id = pt.photo_id ".
-				" GROUP BY p.id HAVING COUNT( p.id )=$nrtags)");
+	    $DB->query("CREATE TEMP TABLE TEMPPICS AS SELECT p.id as id FROM photo_tags pt, photos p, tags t".
+		       " WHERE pt.tag_id = t.id".
+		       " AND (t.name COLLATE NOCASE IN ($tags))".
+		       " AND p.id = pt.photo_id ".
+		       " GROUP BY p.id HAVING COUNT( p.id )=$nrtags");
+
+	    if (isset($_REQUEST["ID"]))
+	      {
+		$ID = $_REQUEST["ID"];
+		$result = $DB->query("SELECT count(*) as total, (SELECT rowid from TEMPPICS WHERE id = $ID) as row from TEMPPICS");
+	      }
+	    else
+	      $result = $DB->query("SELECT count(*) as total, -1 as row from TEMPPICS");
 	  }
 	else
 	  {
@@ -118,13 +125,22 @@ if (isset($_REQUEST["S"]))
 				 " AND p.id = pt.photo_id ".
 				 " GROUP BY p.id HAVING COUNT( p.id )=$nrtags".
 				 "    LIMIT $OFFSET, $N");
-
 	  }
       }
     else
       {
 	if (isset($_REQUEST["C"]))
-	  $result = $DB->query("SELECT count(*) as total FROM photos");
+	  {
+	    $DB->query("CREATE TEMP TABLE TEMPPICS AS SELECT id from photos");
+
+	    if (isset($_REQUEST["ID"]))
+	      {
+		$ID = $_REQUEST["ID"];
+		$result = $DB->query("SELECT count(*) as total, (SELECT rowid FROM TEMPPICS WHERE id=$ID) as row FROM TEMPPICS");
+	      }
+	    else
+	      $result = $DB->query("SELECT count(*) as total, -1 as row FROM TEMPPICS");
+	  }
 	else
 	  $result = $DB->query("SELECT * FROM photos LIMIT $OFFSET, $N");
       }
