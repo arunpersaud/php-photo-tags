@@ -221,18 +221,20 @@ function load_content(a) {
      checkbutton();
     });
 
-   update_permalink()
+   update_permalink(a)
 }
 
-function update_permalink() {
+function update_permalink(page) {
   /* update permalink */
 
   permalink = webbase;
 
   if(T!="")
     permalink += '/tag/' + T;
-  if(a!=1)
-    permalink += '/page/' + a;
+  if(page!=1)
+    permalink += '/page/' + page;
+  if(ID>0)
+    permalink += '/pic/' + ID;
 
   d3.select(".permalink").html("Permalink: <a href=\""+permalink+"\">"+permalink+"</a>");
 }
