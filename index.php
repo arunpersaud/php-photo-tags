@@ -219,14 +219,18 @@ function load_content(a) {
      checkbutton();
     });
 
+   update_permalink()
+}
+
+function update_permalink() {
   /* update permalink */
 
   permalink="<?php echo $webbase ?>";
+
   if(T!="")
     permalink += '/tag/' + T;
   if(a!=1)
     permalink += '/page/' + a;
-
 
   d3.select(".permalink").html("Permalink: <a href=\""+permalink+"\">"+permalink+"</a>");
 }
