@@ -30,7 +30,7 @@ else
 
 <html>
 <title><?php echo htmlspecialchars($title) ?></title>
-<script src="<?php echo $webbase?>/d3.min.js"></script>
+<script src = "<?php echo $webbase?>/d3.min.js"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo $webbase?>/normalize.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo $webbase?>/style.css" />
 
@@ -78,15 +78,17 @@ var T="<?php echo $tags ?>";
 var ID=<?php echo $pic ?>;
 var count=0;
 
+var webbase = "<?php echo $webbase?>";
+
 /* populate data list with tags*/
-d3.json("<?php echo $webbase?>/getjson.php?S", function(json) {
+d3.json(webbase+"/getjson.php?S", function(json) {
     d3.select("#MyTags").selectAll("option").data(json)
       .enter().append("option").attr("value",function(d) {return d.name});
   });
 
 /* update form to point to new link */
 d3.select("input").on("keyup", function(d) {
-    d3.select('form').attr("action","<?php echo $webbase?>/tag/"+document.getElementById('MyTagsInput').value.replace(" ","+"));
+    d3.select('form').attr("action",webbase+"/tag/"+document.getElementById('MyTagsInput').value.replace(" ","+"));
 });
 
 if (T!="")
@@ -110,11 +112,11 @@ function load_content(a) {
   update_page_index(a);
 
   if (ID>=0)
-    url = "<?php echo $webbase?>/getjson.php?ID="+ID;
+    url = webbase+"/getjson.php?ID="+ID;
   else if(T!="")
-    url = "<?php echo $webbase?>/getjson.php?T="+T+"&P="+a;
+    url = webbase+"/getjson.php?T="+T+"&P="+a;
   else
-    url = "<?php echo $webbase?>/getjson.php?P="+a;
+    url = webbase+"/getjson.php?P="+a;
 
   /* update pics */
   d3.json(url, function(json) {
@@ -126,21 +128,21 @@ function load_content(a) {
       if (ID>=0)
 	{
 	  var singlepicspace=pics.selectAll("li").data(picdata).enter().append("li").append("div").attr("class","singlepic");
-	  singlepicspace.append("div").attr("class","left").append("img").attr("src","<?php echo $webbase?>/left.png");
+	  singlepicspace.append("div").attr("class","left").append("img").attr("src",webbase+"/left.png");
 	  singlepicspace.append("img")
 	    .attr("class","large")
 	    .attr("src",function(d) {
 		s= d.base_uri+'/'+d.filename;
-		s = s.replace('file:\/\/<?php echo "".str_replace("/","\/",$dbprefix); ?>','<?php echo $webbase?>/Photos-small/');
+		s = s.replace('file:\/\/<?php echo "".str_replace("/","\/",$dbprefix); ?>',webbase+'/Photos-small/');
 		return s;
 	      });
-	  singlepicspace.append("div").attr("class","right").append("img").attr("src","<?php echo $webbase?>/right.png");
+	  singlepicspace.append("div").attr("class","right").append("img").attr("src",webbase+"/right.png");
 
 	  /* update thumbnails */
 	  if(T!="")
-	    url2 = "<?php echo $webbase?>/getjson.php?NP=1&T="+T+"&ID="+ID;
+	    url2 = webbase+"/getjson.php?NP=1&T="+T+"&ID="+ID;
 	  else
-	    url2 = "<?php echo $webbase?>/getjson.php?NP=1&ID="+ID;
+	    url2 = webbase+"/getjson.php?NP=1&ID="+ID;
 
 	  var IDprev=-1;
 	  var IDnext=-1;
@@ -150,7 +152,7 @@ function load_content(a) {
 	      thumbs.enter().append("li")
 		.append("a")
 		.attr("href",function(d) {
-		    s = '<?php echo $webbase; ?>';
+		    s = webbase;
 		    if(T!="")
 		      s = s + '/tag/' + T;
 		    s = s + '/pic/' + d.id;
@@ -167,7 +169,7 @@ function load_content(a) {
 		.append("img")
 		.attr("src",function(d) {
 		    s= d.base_uri+'/'+d.filename;
-		    s = s.replace('file:\/\/<?php echo "".str_replace("/","\/",$dbprefix); ?>','<?php echo $webbase?>/Photos-tiny/');
+		    s = s.replace('file:\/\/<?php echo "".str_replace("/","\/",$dbprefix); ?>',webbase+'/Photos-tiny/');
 		    return s;
 		  });
 
@@ -175,7 +177,7 @@ function load_content(a) {
 
 	      if (IDprev != -1 )
 		{
-		  s = '<?php echo $webbase; ?>';
+		  s = webbase;
 		  if(T!="")
 		    s = s + '/tag/' + T;
 		  s = s + '/pic/' + IDprev;
@@ -183,7 +185,7 @@ function load_content(a) {
 		}
 	      if (IDnext != -1 )
 		{
-		  s = '<?php echo $webbase; ?>';
+		  s = webbase;
 		  if(T!="")
 		    s = s + '/tag/' + T;
 		  s = s + '/pic/' + IDnext;
@@ -199,7 +201,7 @@ function load_content(a) {
 	    .enter().append("li")
 	    .append("a")
 	    .attr("href",function(d) {
-		s = '<?php echo $webbase; ?>';
+		s = webbase;
 		if(T!="")
 		  s = s + '/tag/' + T;
 		if(a!=1)
@@ -211,7 +213,7 @@ function load_content(a) {
 	    .attr("src",function(d) {
 		count++;
 		s= d.base_uri+'/'+d.filename;
-		s = s.replace('file:\/\/<?php echo "".str_replace("/","\/",$dbprefix); ?>','<?php echo $webbase?>/Photos-tiny/');
+		s = s.replace('file:\/\/<?php echo "".str_replace("/","\/",$dbprefix); ?>',webbase+'/Photos-tiny/');
 		return s;
 	      });
 	};
@@ -225,7 +227,7 @@ function load_content(a) {
 function update_permalink() {
   /* update permalink */
 
-  permalink="<?php echo $webbase ?>";
+  permalink = webbase;
 
   if(T!="")
     permalink += '/tag/' + T;
@@ -247,7 +249,7 @@ function right() {
 
 function cloud() {
 
-  url = "<?php echo $webbase?>/getjson.php?CLOUD=1";
+  url = webbase+"/getjson.php?CLOUD=1";
 
   pics.selectAll("li").remove();
 
@@ -261,7 +263,7 @@ function cloud() {
 	.text(function(d) { return d.name+" "; })
 	.on("mouseover", function(d){ d3.select(this).style("color","red")} )
 	.on("mouseout", function(d){ d3.select(this).style("color","white")} )
-	.on("click", function(d) { document.location.href='<?php echo $webbase?>/tag/'+d.name })
+	.on("click", function(d) { document.location.href=webbase+'/tag/'+d.name })
     });
 }
 
@@ -288,9 +290,9 @@ function update_page_index(mypage)
     myID = "&ID="+ID;
 
   if(T!="")
-    url = "<?php echo $webbase?>/getjson.php?C=1&T="+T+myID;
+    url = webbase+"/getjson.php?C=1&T="+T+myID;
   else
-    url = "<?php echo $webbase?>/getjson.php?C=1"+myID;
+    url = webbase+"/getjson.php?C=1"+myID;
 
   d3.json(url, function(json) {
     /* update index, show only page +-5 pages max */
@@ -303,7 +305,7 @@ function update_page_index(mypage)
 
         if(mypage>7)
 	  {
-	    s+=" <a href=\"<?php echo $webbase?>";
+	    s+=" <a href=\""+webbase;
 	    if(T!="")
 	      s+="/tag/"+T;
 	    s+="/page/1\">1</a>...";
@@ -318,7 +320,7 @@ function update_page_index(mypage)
 	      s+= " "+i+" ";
 	    else
 	      {
-		s+=" <a href=\"<?php echo $webbase?>";
+		s+=" <a href=\""+webbase;
 		if(T!="")
 		  s+="/tag/"+T;
 		s+="/page/"+i+"\">"+i+"</a>";
@@ -327,14 +329,14 @@ function update_page_index(mypage)
 
         if(mypage+5<n)
 	  {
-	    s+="... <a href=\"<?php echo $webbase?>";
+	    s+="... <a href=\""+webbase;
 	    if(T!="")
 	      s+="/tag/"+T;
 	    s+="/page/"+(n+1)+"\">"+(n+1)+"</a>";
 	  }
         else if(mypage+5==n)
 	  {
-	    s+=" <a href=\"<?php echo $webbase?>";
+	    s+=" <a href=\""+webbase;
 	    if(T!="")
 	      s+="/tag/"+T;
 	    s+="/page/"+(n+1)+"\">"+(n+1)+"</a>";
