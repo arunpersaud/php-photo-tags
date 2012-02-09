@@ -35,6 +35,12 @@ nav {
   height: 100px;
 }
 
+img.current {
+    position:relative;
+    top:1px;
+    border: 1px solid white;
+}
+
 .pics img.large{
   border: 1px solid white;
   margin: 2px;
@@ -54,11 +60,15 @@ footer {
 
 .debug { position: absolute; top:0; left:0}
 
+button.currentpage {
+   background-color: #aaa;
+}
+
 .nextprev ul li {
     display:inline;
 }
 .nextprev ul li img {
-    padding-right: 5px;
+    margin-right: 5px;
 }
 
 .singlepic {
@@ -80,14 +90,14 @@ footer {
     border: 0px solid white;
 }
 
-.singlepic .left, .singlepic .right { 
+.singlepic .left, .singlepic .right {
     display: none;
     height: 500px;
     width: 50px;
     z-index:2;
     opacity: 0.0;
 }
-.singlepic .left { 
+.singlepic .left {
     position: absolute;
     left: 3px;
     top: 3px;
@@ -98,6 +108,6 @@ footer {
     top: -3px;
 }
 
-.singlepic .left:hover, .singlepic .right:hover { 
+.singlepic .left:hover, .singlepic .right:hover {
     opacity: 0.95;
 }

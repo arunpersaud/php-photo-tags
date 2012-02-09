@@ -40,7 +40,7 @@ else
 <h1><?php echo htmlspecialchars($title) ?></h1>
 
 <nav>
-<span class="index"></span>
+page <span class="index"></span>
 <button class="prev" type="button" disabled="disabled" onclick="prev_page()"> prev </button>
 <button class="next" type="button" onclick="next_page()">next </button>
 <button class="all"  type="submit" onclick="document.location.href='<?php echo $webbase?>'">all</button>
@@ -107,9 +107,7 @@ if (T!="")
   };
 
 function load_content() {
-  d3.select(".debug").text("T,P,N = *"+T+"* *"+page+"* *"+N+"*");
-
-  update_page_index();
+  //  d3.select(".debug").text("T,P,N = *"+T+"* *"+page+"* *"+N+"*");
 
   if (ID>=0)
     url = webbase+"/getjson.php?ID="+ID;
@@ -127,7 +125,7 @@ function load_content() {
       /* if ID is set, just show one pictures, else create an array of pictures */
       if (ID>=0)
 	{
-	  var singlepicspace=pics.selectAll("li").data(picdata).enter().append("li").append("div").attr("class","singlepic");
+	  var singlepicspace=pics.selectAll("li").data(picdata, function(d){return ID;}).enter().append("li").append("div").attr("class","singlepic");
 	  singlepicspace.append("div").attr("class","left").append("img").attr("src",webbase+"/left.png");
 	  singlepicspace.append("img")
 	    .attr("class","large")
@@ -138,61 +136,7 @@ function load_content() {
 	      });
 	  singlepicspace.append("div").attr("class","right").append("img").attr("src",webbase+"/right.png");
 
-	  /* update thumbnails */
-	  if(T!="")
-	    url2 = webbase+"/getjson.php?NP=1&T="+T+"&ID="+ID;
-	  else
-	    url2 = webbase+"/getjson.php?NP=1&ID="+ID;
-
-	  var IDprev=-1;
-	  var IDnext=-1;
-	  var IDcurr=-1;
-	  d3.json(url2, function(json2) {
-	      var thumbs= d3.select(".nextprev").select("ul").selectAll("li").data(json2);
-	      thumbs.enter().append("li")
-		.append("a")
-		.attr("href",function(d) {
-		    s = webbase;
-		    if(T!="")
-		      s = s + '/tag/' + T;
-		    s = s + '/pic/' + d.id;
-
-		    if( IDcurr != ID )
-		      {
-			IDprev = IDcurr;
-			IDcurr = IDnext;
-			IDnext = d.id;
-		      }
-		    
-		    return s;
-		  })
-		.append("img")
-		.attr("src",function(d) {
-		    s= d.base_uri+'/'+d.filename;
-		    s = s.replace('file:\/\/<?php echo "".str_replace("/","\/",$dbprefix); ?>',webbase+'/Photos-tiny/');
-		    return s;
-		  });
-
-	      thumbs.exit().remove();
-
-	      if (IDprev != -1 )
-		{
-		  s = webbase;
-		  if(T!="")
-		    s = s + '/tag/' + T;
-		  s = s + '/pic/' + IDprev;
-		  d3.select(".left").on("click", function(d) { document.location.href=s })
-		}
-	      if (IDnext != -1 )
-		{
-		  s = webbase;
-		  if(T!="")
-		    s = s + '/tag/' + T;
-		  s = s + '/pic/' + IDnext;
-		  d3.select(".right").on("click", function(d) { document.location.href=s })
-		}
-
-	    });
+	  update_thumbnails();
 	}
       else
 	{
@@ -200,15 +144,7 @@ function load_content() {
 	  pics.selectAll("li").data(picdata)
 	    .enter().append("li")
 	    .append("a")
-	    .attr("href",function(d) {
-		s = webbase;
-		if(T!="")
-		  s = s + '/tag/' + T;
-		if(page!=1)
-		  s = s + '/page/' + page;
-		s = s + '/pic/' + d.id;
-		return s;
-	      })
+	    .on("click", function(d) { load_pic(d.id); })
 	    .append("img")
 	    .attr("src",function(d) {
 		count++;
@@ -249,6 +185,19 @@ function next_page() {
   load_content();
 }
 
+function prev_pic() {
+}
+
+function next_pic() {
+}
+
+function load_pic(myid) {
+  ID=myid;
+  update_page_index();
+  update_thumbnails();
+  load_content();
+}
+
 function tagcloud() {
 
   url = webbase+"/getjson.php?CLOUD=1";
@@ -266,6 +215,62 @@ function tagcloud() {
 	.on("mouseover", function(d){ d3.select(this).style("color","red")} )
 	.on("mouseout", function(d){ d3.select(this).style("color","white")} )
 	.on("click", function(d) { document.location.href=webbase+'/tag/'+d.name })
+    });
+}
+
+function update_thumbnails(){
+  if(T!="")
+    url2 = webbase+"/getjson.php?NP=1&T="+T+"&ID="+ID;
+  else
+    url2 = webbase+"/getjson.php?NP=1&ID="+ID;
+
+  var IDprev=-1;
+  var IDnext=-1;
+  var IDcurr=-1;
+  d3.json(url2, function(json2) {
+      /* figure out where the arrows on the pic should link to */
+      all=""
+      for (var i in json2){
+	if( IDcurr != ID )
+	  {
+	    IDprev = IDcurr;
+	    IDcurr = IDnext;
+	    IDnext = json2[i].id;
+	  };
+      }
+
+      var thumbs= d3.select(".nextprev").select("ul").selectAll("li").data(json2, function(d) {return d.id;});
+
+      thumbs.enter().append("li")
+	.append("a")
+	.on("click", function(d) {
+	    load_pic(d.id); }
+	  )
+	.append("img")
+	.attr("src",function(d) {
+	    s= d.base_uri+'/'+d.filename;
+	    s = s.replace('file:\/\/<?php echo "".str_replace("/","\/",$dbprefix); ?>',webbase+'/Photos-tiny/');
+	    return s;
+	  })
+	.style("height","0")
+	.transition().duration(1000)
+	.style("height","100px");
+
+      thumbs.exit().select("img").transition().duration(1000).style("height","0");
+      thumbs.exit().transition().duration(1050).remove();
+
+      /* resort elements */
+      d3.select(".nextprev").select("ul").selectAll("li").sort(function(a,b){return a.id-b.id;});
+      d3.select(".nextprev").select("ul").selectAll("li").select("a").select("img").classed("current",false);
+      d3.select(".nextprev").select("ul").selectAll("li").select("a").select("img").classed("current",function(d){return (d.id==IDcurr);});
+
+
+      /* add links for left/right arrows */
+      if (IDprev != -1 )
+	d3.select(".left").on("click", function() { load_pic(IDprev); });
+      if (IDnext != -1 )
+	d3.select(".right").on("click", function() { load_pic(IDnext); });
+
     });
 }
 
@@ -302,56 +307,47 @@ function update_page_index()
     if(nr > 0)
       page = nr+1;
 
-    s = "";
+    var mydata = new Array();  // add json data  {page: <nr>, name: <name>} ; at end reform array into real json and use d3 to parse it
 
     if(n>0)
       {
-        s="page ";
-
         if(page>7)
 	  {
-	    s+=" <a href=\""+webbase;
-	    if(T!="")
-	      s+="/tag/"+T;
-	    s+="/page/1\">1</a>...";
+	    mydata.push('{ page:1, name:"1"}');
+	    mydata.push('{ page:1.5, name:"..."}');
 	    start = page-5;
 	  }
         else
 	  start=1;
 
         for(i=start;i<=Math.min(n+1,page+5);i++)
-	  {
-	    if(i==page)
-	      s+= " "+i+" ";
-	    else
-	      {
-		s+=" <a href=\""+webbase;
-		if(T!="")
-		  s+="/tag/"+T;
-		s+="/page/"+i+"\">"+i+"</a>";
-	      }
-	  }
+	  mydata.push('{ page:'+i+', name:"'+i+'"}');
 
         if(page+5<n)
 	  {
-	    s+="... <a href=\""+webbase;
-	    if(T!="")
-	      s+="/tag/"+T;
-	    s+="/page/"+(n+1)+"\">"+(n+1)+"</a>";
+	    mydata.push('{ page:'+(n+0.5)+', name:"..."}');
+	    mydata.push('{ page:'+(n+1)+', name:"'+(n+1)+'"}');
 	  }
         else if(page+5==n)
-	  {
-	    s+=" <a href=\""+webbase;
-	    if(T!="")
-	      s+="/tag/"+T;
-	    s+="/page/"+(n+1)+"\">"+(n+1)+"</a>";
-	  };
+	  mydata.push('{ page:'+(n+1)+', name:"'+(n+1)+'"}');
       };
-    d3.select(".index").html(s);
+    mydata = "["+mydata.join(",")+"]";
+    mydata =  eval('(' + mydata + ')');
+
+    var pageindex = d3.select(".index").selectAll("button").data(mydata, function(d){ return d.page; });
+    pageindex.exit().remove();
+    pageindex.enter().append("button")
+      .on("click", function(d) { if(  (d.page - Math.floor(d.page)) ==0 )  {page=d.page; ID=-1;load_content(); update_page_index();} })
+      .text(function(d) {return " "+d.name+" "});
+    pageindex.sort( function(a,b) { return a.page- b.page;} );
     } );
+
+  d3.select(".index").selectAll("button").classed("currentpage",false);
+  d3.select(".index").selectAll("button").classed("currentpage",function(d){return (d.page==page);});
 }
 
 load_content();
+update_page_index();
 
 </script>
 
