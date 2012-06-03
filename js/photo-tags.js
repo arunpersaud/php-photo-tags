@@ -1,30 +1,33 @@
 var pics = d3.select(".pics").select("ul");
 
-/* populate data list with tags*/
-d3.json(webbase+"/getjson.php?S", function(json) {
-    d3.select("#MyTags").selectAll("option").data(json)
-      .enter().append("option").attr("value",function(d) {return d.name});
+function init()
+{
+  /* populate data list with tags*/
+  d3.json(webbase+"/getjson.php?S", function(json) {
+      d3.select("#MyTags").selectAll("option").data(json)
+        .enter().append("option").attr("value",function(d) {return d.name});
+    });
+
+  /* update form to point to new link */
+  d3.select("input").on("keyup", function(d) {
+      d3.select('form').attr("action",webbase+"/tag/"+document.getElementById('MyTagsInput').value.replace(" ","+"));
   });
 
-/* update form to point to new link */
-d3.select("input").on("keyup", function(d) {
-    d3.select('form').attr("action",webbase+"/tag/"+document.getElementById('MyTagsInput').value.replace(" ","+"));
-});
+  if (T!="")
+    {
+      var mycurrenttags = T.split(",");
 
-if (T!="")
-  {
-    var mycurrenttags = T.split(",");
-
-    d3.select("#currenttags").select("button").remove();
-    d3.select("#currenttags").selectAll("button")
-      .data(mycurrenttags).enter()
-      .append("button").attr("type","button").text( function(d) {return d;} );
-  }
- else
-  {
-    d3.select("#currenttags").select("button").remove();
-    d3.select("#currenttags").append("span").text( ' none');
-  };
+      d3.select("#currenttags").select("button").remove();
+      d3.select("#currenttags").selectAll("button")
+        .data(mycurrenttags).enter()
+        .append("button").attr("type","button").text( function(d) {return d;} );
+    }
+   else
+    {
+      d3.select("#currenttags").select("button").remove();
+      d3.select("#currenttags").append("span").text( ' none');
+    };
+}
 
 function load_content() {
   //  d3.select(".debug").text("T,P,N = *"+T+"* *"+page+"* *"+N+"*");

@@ -85,6 +85,7 @@ page <span class="index"></span>
 
 <script src = "<?php echo $webbase.autoversion("/js/photo-tags.js")?>"></script>
 <script type="text/javascript" >
+
 /*hand parameters over to javascript*/
 var page=<?php echo $page ?>;
 var N=<?php echo $N ?>;
@@ -94,6 +95,7 @@ var count=0;
 var dbprefix="<?php echo $dbprefix ?>".replace(/\//g,"\/");
 var webbase = "<?php echo $webbase?>";
 
+init();
 load_content();
 update_page_index();
 
