@@ -22,14 +22,26 @@ dbprefix=${dbprefix//\//\\\/}
 limit=`$NICE sqlite3 $LOCALDB "select count(*) from photos"`
 
 
+function usage()
+{
+  echo "Usage: $0 [OPTIONS]"
+  echo " Options:"
+  echo "          -r          remove metadata from pictures"
+  echo "          -l NUMBER   only process NUMBER pictures"
+}
+
 # parse command line
-while getopts ":rl:" opt; do
+while getopts ":rl:h" opt; do
   case $opt in
     r)
       removemeta=1
       ;;
     l)
       limit=$OPTARG
+      ;;
+    h)
+      usage
+      exit 0
       ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2
