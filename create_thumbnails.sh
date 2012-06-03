@@ -5,7 +5,7 @@ NICE="nice -19"
 # init some variables
 removemeta=0
 
-# parse ini file 
+# parse ini file
 CONFIG_FILE="config.ini"
 
 # copied and modified from http://mark.aufflick.com/blog/2007/11/08/parsing-ini-files-with-sed
@@ -60,7 +60,7 @@ while [ $done -lt 100 ] ; do
    echo "skipping $offset pics, getting 50 new pics to work on..."
    # handle white space in filename correctly
    FILES=`$NICE sqlite3 $LOCALDB "select replace(base_uri||'/'||filename,' ','%20') from photos limit $offset,100"`
-   
+
    if [ "x$FILES" != "x" ] ; then
      #found some files, process them
      for file in $FILES; do
@@ -69,7 +69,7 @@ while [ $done -lt 100 ] ; do
 	 file=${file//\%20/ }
 	 dir=`dirname "$file"`
 	 base=`basename "$file"`
-	 
+
 	 if [ ! -s "Photos-tiny/$dir/$base" ] ; then
 	     mkdir -p Photos-tiny/$dir
 	     $NICE convert "$dirprefix/$file" -auto-orient -resize x100 -quality 80% "Photos-tiny/$dir/$base"
@@ -80,7 +80,7 @@ while [ $done -lt 100 ] ; do
 		 $NICE jhead -q -se -cl "This photo belongs to $admin and was taken from $webbase. If you want to use this photo, please contact him." "Photos-tiny/$dir/$base"
 	     fi
 	     done=$((done+1))
-	 fi 
+	 fi
 	 if [ ! -s "Photos-small/$dir/$base" ] ; then
 	     mkdir -p Photos-small/$dir
 	     $NICE convert "$dirprefix/$file" -auto-orient -resize x600 -quality 80% "Photos-small/$dir/$base"
@@ -91,7 +91,7 @@ while [ $done -lt 100 ] ; do
 		 $NICE jhead -q -se -cl "This photo belongs to $admin and was taken from $webbase. If you want to use this photo, please contact him." "Photos-small/$dir/$base"
 	     fi
 	     done=$((done+1))
-	 fi 
+	 fi
 
 	 echo -n -e "$((done/2))       \r"
      done

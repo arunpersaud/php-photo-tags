@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# parse ini file 
+# parse ini file
 CONFIG_FILE="config.ini"
 
 # copied and modified from http://mark.aufflick.com/blog/2007/11/08/parsing-ini-files-with-sed
@@ -27,12 +27,12 @@ CL_INCLUDE=""
 CL_EXCLUDE=""
 
 for i in "$@"; do
-    case $i in 
+    case $i in
 	--include=*)
-	   CL_INCLUDE=${i#*=} 
+	   CL_INCLUDE=${i#*=}
 	   ;;
 	--exclude=*)
-	   CL_EXCLUDE=${i#*=} 
+	   CL_EXCLUDE=${i#*=}
 	   ;;
 	-h|--help)
 	   usage
@@ -69,7 +69,7 @@ fi
 # test if localdb already exist:
 # yes:
 #     see if photo-db is newer? yes: merge them; no: do nothing
-# no: 
+# no:
 #     create it
 
 cp $REMOTEDB  $LOCALDB
@@ -93,7 +93,7 @@ delete from tags where id not in (select distinct tag_id from photo_tags asc);
 delete from rolls where id not in (select distinct roll_id from photos asc);
 
 drop table rmphotoids;
-drop table jobs; 
+drop table jobs;
 drop table exports;
 
 vacuum;
