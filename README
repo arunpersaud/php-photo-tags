@@ -11,7 +11,7 @@ then run for example
 f-spot-db-reduce.sh --include='Public'
 
 This will create a new smaller database that only contains information
-about pictures with the Public tag. 
+about pictures with the Public tag.
 
 2)  Next run
 
@@ -25,7 +25,7 @@ rented web-space where execcive CPU uses is an issue.
 
 3) install .htaccess
 
-edit the "RewriteBase" in the .htaccess_template file and rename it to .htaccess.
+edit the "RewriteBase" in the htaccess_template file and rename it to .htaccess.
 Onces this is done you can visit index.php and everything should be working.
 
 Feel free to fork, send in patches, make suggestions.
