@@ -126,7 +126,7 @@ function load_content() {
       if (ID>=0)
 	{
 	  var singlepicspace=pics.selectAll("li").data(picdata, function(d){return ID;}).enter().append("li").append("div").attr("class","singlepic");
-	  singlepicspace.append("div").attr("class","left").append("img").attr("src",webbase+"/left.png");
+	  singlepicspace.append("div").attr("class","left").append("img").attr("src",webbase+"/icons/left.png");
 	  singlepicspace.append("img")
 	    .attr("class","large")
 	    .attr("src",function(d) {
@@ -134,7 +134,7 @@ function load_content() {
 		s = s.replace('file:\/\/<?php echo "".str_replace("/","\/",$dbprefix); ?>',webbase+'/Photos-small/');
 		return s;
 	      });
-	  singlepicspace.append("div").attr("class","right").append("img").attr("src",webbase+"/right.png");
+	  singlepicspace.append("div").attr("class","right").append("img").attr("src",webbase+"/icons/right.png");
 
 	  update_thumbnails();
 	}
