@@ -6,8 +6,11 @@ RewriteBase   /<insert web base url here>
 # hide git directory (and others)
 RedirectMatch 404 \.(git|cvs|svn|bzr|hg)(/.*|$)
 
+# use autoversioning of js and css files
+RewriteRule ^(.*)\.[[:xdigit:]]{32}\.(css|js)$ $1.$2 [L]
 
-# make the url nice and clean; the comments shows an url that should be matched
+
+### make the url nice and clean; the comments shows an url that should be matched
 
 # web_base/tag/me+berlin/pic/id
 RewriteRule tag/([-_\s,a-zA-Z0-9+]*)/pic/([0-9]*) index.php?tag=$1&pic=$2 [L]

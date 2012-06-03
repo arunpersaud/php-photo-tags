@@ -25,14 +25,29 @@ else
   $pic = -1;
 /* end parse flags */
 
+/* autoversioning of js and css files */
+function autoversion($file)
+{
+  /* changes the file name of e.g. css/style.css to css/style.<md5>.css/js
+   * this way the browser can cache the file and will reload it if the file changed
+   * needs to have .htaccess set up correctly to link back to css/style.css */
+
+  /* only use it for file that have an absolut path */
+  if(!file_exists(dirname($_SERVER['SCRIPT_FILENAME']). '/' . $file))
+    return $file;
+
+  $md5 = md5_file(dirname($_SERVER['SCRIPT_FILENAME']). '/' . $file);
+  return preg_replace('{\\.([^./]+)$}', ".$md5.\$1", $file);
+}
+
 /* The basic layout */
 ?>
 
 <html>
 <title><?php echo htmlspecialchars($title) ?></title>
-<script src = "<?php echo $webbase?>/js/d3.min.js"></script>
-<link rel="stylesheet" type="text/css" href="<?php echo $webbase?>/css/normalize.css" />
-<link rel="stylesheet" type="text/css" href="<?php echo $webbase?>/css/style.css" />
+<script src = "<?php echo $webbase.autoversion("/js/d3.min.js")?>"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $webbase.autoversion("/css/normalize.css")?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo $webbase.autoversion("/css/style.css")?>" />
 
 <body>
 
@@ -68,7 +83,7 @@ page <span class="index"></span>
 </footer>
 
 
-<script src = "<?php echo $webbase?>/js/photo-tags.js"></script>
+<script src = "<?php echo $webbase.autoversion("/js/photo-tags.js")?>"></script>
 <script type="text/javascript" >
 /*hand parameters over to javascript*/
 var page=<?php echo $page ?>;
