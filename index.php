@@ -31,8 +31,8 @@ else
 <html>
 <title><?php echo htmlspecialchars($title) ?></title>
 <script src = "<?php echo $webbase?>/d3.min.js"></script>
-<link rel="stylesheet" type="text/css" href="<?php echo $webbase?>/normalize.css" />
-<link rel="stylesheet" type="text/css" href="<?php echo $webbase?>/style.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $webbase?>/css/normalize.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $webbase?>/css/style.css" />
 
 <body>
 
