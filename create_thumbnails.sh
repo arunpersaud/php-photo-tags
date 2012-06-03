@@ -19,15 +19,25 @@ eval `sed -e 's/[[:space:]]*\=[[:space:]]*/=/g' \
 
 LOCALDB=$fspotdb
 dbprefix=${dbprefix//\//\\\/}
+limit=`$NICE sqlite3 $LOCALDB "select count(*) from photos"`
+
 
 # parse command line
-while getopts ":r" opt; do
+while getopts ":rl:" opt; do
   case $opt in
     r)
       removemeta=1
       ;;
+    l)
+      limit=$OPTARG
+      ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+    :)
+      echo "Option -$OPTARG requires an argument." >&2
+      exit 1
       ;;
   esac
 done
@@ -56,10 +66,10 @@ done=0
 offset=0
 FILES=""
 
-while [ $done -lt 100 ] ; do
-   echo "skipping $offset pics, getting 50 new pics to work on..."
+while [ $done -lt $limit ] ; do
+   echo "skipping $offset pics, getting $limit new pics to work on..."
    # handle white space in filename correctly
-   FILES=`$NICE sqlite3 $LOCALDB "select replace(base_uri||'/'||filename,' ','%20') from photos limit $offset,100"`
+   FILES=`$NICE sqlite3 $LOCALDB "select replace(base_uri||'/'||filename,' ','%20') from photos limit $offset,$limit"`
 
    if [ "x$FILES" != "x" ] ; then
      #found some files, process them
@@ -99,6 +109,6 @@ while [ $done -lt 100 ] ; do
        break;
    fi
 
-   #get ready to get the next 100
-   offset=$((offset+50))
+   #get ready to get the next photos
+   offset=$((offset+$limit))
 done
