@@ -3,6 +3,9 @@ RewriteEngine on
 
 RewriteBase   /<insert web base url here>
 
+# hide git directory (and others)
+RedirectMatch 404 \.(git|cvs|svn|bzr|hg)(/.*|$)
+
 
 # make the url nice and clean; the comments shows an url that should be matched
 
@@ -20,5 +23,6 @@ RewriteRule pic/([0-9]*) index.php?pic=$1 [L]
 
 # web_base/page/4
 RewriteRule page/([0-9]*) index.php?page=$1 [L]
+
 
 </IfModule>
