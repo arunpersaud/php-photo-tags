@@ -30,7 +30,7 @@ else
 
 <html>
 <title><?php echo htmlspecialchars($title) ?></title>
-<script src = "<?php echo $webbase?>/d3.min.js"></script>
+<script src = "<?php echo $webbase?>/js/d3.min.js"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo $webbase?>/css/normalize.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo $webbase?>/css/style.css" />
 
