@@ -1,1 +1,6 @@
 *~
+.htaccess
+Photos-small
+Photos-tiny
+config.ini
+*.db
