@@ -111,3 +111,8 @@ button.currentpage {
 .singlepic .left:hover, .singlepic .right:hover {
     opacity: 0.95;
 }
+
+.singlepic .details {
+  width: 200;
+  float:right;
+}

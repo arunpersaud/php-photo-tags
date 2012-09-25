@@ -58,6 +58,7 @@ function load_content() {
 		return s;
 	      });
 	  singlepicspace.append("div").attr("class","right").append("img").attr("src",webbase+"/icons/right.png");
+          singlepicspace.append("div").attr("class","details").text('testing testing');
 
 	  update_thumbnails();
 	}
