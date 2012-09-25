@@ -42,12 +42,14 @@ function autoversion($file)
 
 /* The basic layout */
 ?>
-
+<!DOCTYPE html>
 <html>
+<head>
 <title><?php echo htmlspecialchars($title) ?></title>
 <script src = "<?php echo $webbase.autoversion("/js/d3.min.js")?>"></script>
-<link rel="stylesheet" type="text/css" href="<?php echo $webbase.autoversion("/css/normalize.css")?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo $webbase.autoversion("/css/style.css")?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo $webbase.autoversion("/css/bootstrap.min.css")?>" />
+</head>
 
 <body>
 
@@ -55,22 +57,26 @@ function autoversion($file)
 <h1><?php echo htmlspecialchars($title) ?></h1>
 
 <nav>
-page <span class="index"></span>
-<button class="prev" type="button" disabled="disabled" onclick="prev_page()"> prev </button>
-<button class="next" type="button" onclick="next_page()">next </button>
-<button class="all"  type="submit" onclick="document.location.href='<?php echo $webbase?>'">all</button>
+
+<div class="pagination">
+  <ul>
+  </ul>
+</div>
+
 </nav>
+
 
 <div class="permalink"></div>
 
 <div class="tagsearch">
-<form method="get" action="">
+<form class="form-search" method="get" action="">
  Search for tag: <input list="MyTags" id="MyTagsInput" type="text" value="" />
   <datalist id="MyTags">
   </datalist>
 </form>
   Current tags:<span id="currenttags"></span>
   <button class="next" type="button" onclick="tagcloud()">tag cloud</button>
+  <button class="all"  onclick="document.location.href='<?php echo $webbase?>'">all</button>
 </div>
 
 <div class="nextprev"> <ul></ul></div>
@@ -84,6 +90,8 @@ page <span class="index"></span>
 
 
 <script src = "<?php echo $webbase.autoversion("/js/photo-tags.js")?>"></script>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="js/bootstrap.min.js"></script>
 <script type="text/javascript" >
 
 /*hand parameters over to javascript*/

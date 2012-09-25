@@ -76,10 +76,8 @@ function load_content() {
 		return s;
 	      });
 	};
-
-     checkbutton();
     });
-
+   checkbutton();
    update_permalink()
 }
 
@@ -200,14 +198,14 @@ function update_thumbnails(){
 function checkbutton()
 {
   if (page==1)
-    { d3.select("button.prev").attr("disabled","disabled");}
+    { d3.select(".pagination ul li:first-child").classed("disabled", true);}
   else
-    { d3.select("button.prev").attr("disabled", null);};
+    { d3.select(".pagination ul li:first-child").classed("disabled", false);};
 
   if (count<N)
-    { d3.select("button.next").attr("disabled","disabled");}
+    { d3.select(".pagination ul li:last-child").classed("disabled", true);}
   else
-    { d3.select("button.next").attr("disabled",null);}
+    { d3.select(".pagination ul li:last-child").classed("disabled", false);}
 }
 
 function update_page_index()
@@ -223,48 +221,59 @@ function update_page_index()
     url = webbase+"/getjson.php?C=1"+myID;
 
   d3.json(url, function(json) {
-    /* update index, show only page +-5 pages max */
-    n = Math.floor(json[0].total/N);
-    nr = Math.floor( (json[0].row-1)/N); /* rowid starts at 1 not 0 */
+      /* update index, show only page +-5 pages max */
+      n  = Math.floor( json[0].total/N   ); /* how many pages */
+      nr = Math.floor( (json[0].row-1)/N ); /* which row are we in? rowid starts at 1 not 0 */
 
-    if(nr > 0)
-      page = nr+1;
+      if(nr > 0) page = nr+1;
 
-    var mydata = new Array();  // add json data  {page: <nr>, name: <name>} ; at end reform array into real json and use d3 to parse it
+      var mydata = new Array();  // add json data  {page: <nr>, name: <name>} ; at end reform array into real json and use d3 to parse it
 
-    if(n>0)
+      if(n>0)
       {
-        if(page>7)
+	  mydata.push('{ page:0.1, name:"Prev"}');
+          if(page>7)
 	  {
-	    mydata.push('{ page:1, name:"1"}');
-	    mydata.push('{ page:1.5, name:"..."}');
-	    start = page-5;
+	      mydata.push('{ page:1, name:"1"}');
+	      mydata.push('{ page:1.5, name:"..."}');
+	      start = page-3;
 	  }
-        else
-	  start=1;
+          else
+	      start=1;
 
-        for(i=start;i<=Math.min(n+1,page+5);i++)
-	  mydata.push('{ page:'+i+', name:"'+i+'"}');
+          for(i=start;i<=Math.min(n+1,page+3);i++)
+	      mydata.push('{ page:'+i+', name:"'+i+'"}');
 
-        if(page+5<n)
+          if(page+3<n)
 	  {
-	    mydata.push('{ page:'+(n+0.5)+', name:"..."}');
-	    mydata.push('{ page:'+(n+1)+', name:"'+(n+1)+'"}');
+	      mydata.push('{ page:'+(n+0.5)+', name:"..."}');
+	      mydata.push('{ page:'+(n+1)+', name:"'+(n+1)+'"}');
 	  }
-        else if(page+5==n)
-	  mydata.push('{ page:'+(n+1)+', name:"'+(n+1)+'"}');
+          else if(page+3==n)
+	      mydata.push('{ page:'+(n+1)+', name:"'+(n+1)+'"}');
+
+	  mydata.push('{ page:'+(n+2.1)+', name:"Next"}');
       };
-    mydata = "["+mydata.join(",")+"]";
-    mydata =  eval('(' + mydata + ')');
+      mydata = "["+mydata.join(",")+"]";
+      mydata =  eval('(' + mydata + ')');
 
-    var pageindex = d3.select(".index").selectAll("button").data(mydata, function(d){ return d.page; });
-    pageindex.exit().remove();
-    pageindex.enter().append("button")
-      .on("click", function(d) { if(  (d.page - Math.floor(d.page)) ==0 )  {page=d.page; ID=-1;load_content(); update_page_index();} })
-      .text(function(d) {return " "+d.name+" "});
-    pageindex.sort( function(a,b) { return a.page- b.page;} );
+      /* remove old elements */
+      d3.selectAll(".pagination").select("ul").selectAll("li").remove();
+
+      /* create new ones */
+      var pageindex = d3.selectAll(".pagination").select("ul").selectAll("li").data(mydata, function(d){return d.page});
+      pageindex.selectAll("li").data(mydata, function(d){ return d.page; });
+      pageindex.enter().append("li").append("a")
+	  .on("click", function(d) { if(  (d.page - Math.floor(d.page)) ==0 )  {page=d.page; ID=-1;load_content(); update_page_index();} })
+	  .text(function(d) {return " "+d.name+" "});
+
+      pageindex.sort( function(a,b) { return a.page- b.page;} );
+
+      /* add callbacks to prev and next buttons */
+      d3.selectAll(".pagination ul li:first-child a").on("click", function(){prev_page();});
+      d3.selectAll(".pagination ul li:last-child  a").on("click", function(){next_page();});
+
+      d3.select(".pagination").select("ul").selectAll("li").classed("active", false);
+      d3.select(".pagination").select("ul").selectAll("li").classed("active", function(d) {return ( d.page == page ); });
     } );
-
-  d3.select(".index").selectAll("button").classed("currentpage",false);
-  d3.select(".index").selectAll("button").classed("currentpage",function(d){return (d.page==page);});
 }

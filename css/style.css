@@ -17,9 +17,6 @@ body {
 
 a[visited]{ color: #aaa;}
 
-.index {
-    margin: 0 10px;
-}
 nav {
     text-align: center;
 }
@@ -59,10 +56,6 @@ footer {
 
 
 .debug { position: absolute; top:0; left:0}
-
-button.currentpage {
-   background-color: #aaa;
-}
 
 .nextprev ul li {
     display:inline;
