@@ -1,4 +1,6 @@
 var pics = d3.select(".pics").select("ul");
+var page;
+var maxpage;
 
 function init()
 {
@@ -30,7 +32,7 @@ function init()
 }
 
 function load_content() {
-  //  d3.select(".debug").text("T,P,N = *"+T+"* *"+page+"* *"+N+"*");
+  // d3.select(".debug").text("T,P,N = *"+T+"* *"+page+"* *"+N+"*");
 
   if (ID>=0)
     url = webbase+"/getjson.php?ID="+ID;
@@ -76,9 +78,9 @@ function load_content() {
 		return s;
 	      });
 	};
+      checkbutton();
+      update_permalink()
     });
-   checkbutton();
-   update_permalink()
 }
 
 function update_permalink() {
@@ -97,13 +99,15 @@ function update_permalink() {
 }
 
 function prev_page() {
-  if (page>=2) page=page-1;
-  load_content();
+    if (page>1) page=page-1;
+    load_content();
+    update_page_index();
 }
 
 function next_page() {
-  page=page+1;
-  load_content();
+    if (page<maxpage) page=page+1;
+    load_content();
+    update_page_index();
 }
 
 function prev_pic() {
@@ -202,10 +206,10 @@ function checkbutton()
   else
     { d3.select(".pagination ul li:first-child").classed("disabled", false);};
 
-  if (count<N)
+  if (page==maxpage)
     { d3.select(".pagination ul li:last-child").classed("disabled", true);}
   else
-    { d3.select(".pagination ul li:last-child").classed("disabled", false);}
+    { d3.select(".pagination ul li:last-child").classed("disabled", false);};
 }
 
 function update_page_index()
@@ -225,6 +229,8 @@ function update_page_index()
       n  = Math.floor( json[0].total/N   ); /* how many pages */
       nr = Math.floor( (json[0].row-1)/N ); /* which row are we in? rowid starts at 1 not 0 */
 
+      maxpage=n+1;
+
       if(nr > 0) page = nr+1;
 
       var mydata = new Array();  // add json data  {page: <nr>, name: <name>} ; at end reform array into real json and use d3 to parse it
@@ -232,7 +238,7 @@ function update_page_index()
       if(n>0)
       {
 	  mydata.push('{ page:0.1, name:"Prev"}');
-          if(page>7)
+          if(page>4)
 	  {
 	      mydata.push('{ page:1, name:"1"}');
 	      mydata.push('{ page:1.5, name:"..."}');
@@ -275,5 +281,7 @@ function update_page_index()
 
       d3.select(".pagination").select("ul").selectAll("li").classed("active", false);
       d3.select(".pagination").select("ul").selectAll("li").classed("active", function(d) {return ( d.page == page ); });
+      checkbutton();
     } );
+
 }
