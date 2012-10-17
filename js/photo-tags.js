@@ -15,19 +15,14 @@ function init()
       d3.select('form').attr("action",webbase+"/tag/"+document.getElementById('MyTagsInput').value.replace(" ","+"));
   });
 
+  d3.select("#currenttags").select("button").remove();
   if (T!="")
     {
       var mycurrenttags = T.split(",");
 
-      d3.select("#currenttags").select("button").remove();
       d3.select("#currenttags").selectAll("button")
         .data(mycurrenttags).enter()
-        .append("button").attr("type","button").text( function(d) {return d;} );
-    }
-   else
-    {
-      d3.select("#currenttags").select("button").remove();
-      d3.select("#currenttags").append("span").text( ' none');
+        .append("button").attr("class","btn btn-small").text( function(d) {return d;} );
     };
 }
 
@@ -51,7 +46,7 @@ function load_content() {
       if (ID>=0)
 	{
 	  var singlepicspace=pics.selectAll("li").data(picdata, function(d){return ID;}).enter().append("li").append("div").attr("class","singlepic");
-	  singlepicspace.append("div").attr("class","left").append("img").attr("src",webbase+"/icons/left.png");
+	  singlepicspace.append("img").attr("class","left").attr("src",webbase+"/icons/left.png");
 	  singlepicspace.append("img")
 	    .attr("class","large")
 	    .attr("src",function(d) {
@@ -59,7 +54,7 @@ function load_content() {
 		s = s.replace('file:\/\/'+dbprefix,webbase+'/Photos-small/');
 		return s;
 	      });
-	  singlepicspace.append("div").attr("class","right").append("img").attr("src",webbase+"/icons/right.png");
+	  singlepicspace.append("img").attr("class","right").attr("src",webbase+"/icons/right.png");
 
 	  update_thumbnails();
 	}
@@ -166,6 +161,8 @@ function update_thumbnails(){
 
       var thumbs= d3.select(".nextprev").select("ul").selectAll("li").data(json2, function(d) {return d.id;});
 
+      thumbs.exit().select("img").transition().duration(1000).style("height","0px").transition().duration(1050).remove();
+      thumbs.exit().transition().duration(1050).remove();
       thumbs.enter().append("li")
 	.append("a")
 	.on("click", function(d) {
@@ -177,16 +174,12 @@ function update_thumbnails(){
 	    s = s.replace('file:\/\/'+dbprefix,webbase+'/Photos-tiny/');
 	    return s;
 	  })
-	.style("height","0")
-	.transition().duration(1000)
+	.style("height","0px")
+	.transition().duration(500)
 	.style("height","100px");
-
-      thumbs.exit().select("img").transition().duration(1000).style("height","0");
-      thumbs.exit().transition().duration(1050).remove();
 
       /* resort elements */
       d3.select(".nextprev").select("ul").selectAll("li").sort(function(a,b){return a.id-b.id;});
-      d3.select(".nextprev").select("ul").selectAll("li").select("a").select("img").classed("current",false);
       d3.select(".nextprev").select("ul").selectAll("li").select("a").select("img").classed("current",function(d){return (d.id==IDcurr);});
 
 
@@ -259,7 +252,13 @@ function update_page_index()
 	      mydata.push('{ page:'+(n+1)+', name:"'+(n+1)+'"}');
 
 	  mydata.push('{ page:'+(n+2.1)+', name:"Next"}');
-      };
+      }
+      else
+      {
+	  mydata.push('{ page:0.1, name:"Prev"}');
+	  mydata.push('{ page:1.1, name:"Next"}');
+      }
+
       mydata = "["+mydata.join(",")+"]";
       mydata =  eval('(' + mydata + ')');
 

@@ -45,10 +45,11 @@ function autoversion($file)
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="utf-8">
 <title><?php echo htmlspecialchars($title) ?></title>
 <script src = "<?php echo $webbase.autoversion("/js/d3.min.js")?>"></script>
-<link rel="stylesheet" type="text/css" href="<?php echo $webbase.autoversion("/css/style.css")?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo $webbase.autoversion("/css/bootstrap.min.css")?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo $webbase.autoversion("/css/style.css")?>" />
 </head>
 
 <body>
@@ -70,13 +71,14 @@ function autoversion($file)
 
 <div class="tagsearch">
 <form class="form-search" method="get" action="">
- Search for tag: <input list="MyTags" id="MyTagsInput" type="text" value="" />
+ <label>Search for tag:</label> <input class="input-medium search-query" list="MyTags" id="MyTagsInput" type="text" value="" />
   <datalist id="MyTags">
   </datalist>
+ <p> Current tags:<span id="currenttags"></span>
+  <button class="next btn btn-small btn-info" onclick="tagcloud()">tag cloud</button>
+  <a class="btn btn-small btn-success" href='<?php echo $webbase?>'>all</a>
+ </p>
 </form>
-  Current tags:<span id="currenttags"></span>
-  <button class="next" type="button" onclick="tagcloud()">tag cloud</button>
-  <button class="all"  onclick="document.location.href='<?php echo $webbase?>'">all</button>
 </div>
 
 <div class="nextprev"> <ul></ul></div>

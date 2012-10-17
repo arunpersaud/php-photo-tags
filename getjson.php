@@ -25,7 +25,7 @@ if (isset($_REQUEST["S"]))
   }
  else if (isset($_REQUEST["NP"]))
   {
-    /* get +- 5 pics from ordered list to show next to a large image */
+    /* get +- 3 pics from ordered list to show next to a large image */
 
     /* first create a temp table with all images and then use rowid to get +-5 images */
 
@@ -55,8 +55,8 @@ if (isset($_REQUEST["S"]))
       {
 	$ID=intval($_REQUEST["ID"]);
 	$result = $DB->query("SELECT * FROM NEXTPREV".
-			     " WHERE rowid > (select rowid from NEXTPREV where id=$ID) -5".
-			     "   AND rowid < (select rowid from NEXTPREV where id=$ID) +5");
+			     " WHERE rowid > (select rowid from NEXTPREV where id=$ID) -3".
+			     "   AND rowid < (select rowid from NEXTPREV where id=$ID) +3");
       }
     else
       {
