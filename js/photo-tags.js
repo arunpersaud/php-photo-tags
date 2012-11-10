@@ -15,16 +15,31 @@ function init()
       d3.select('form').attr("action",webbase+"/tag/"+document.getElementById('MyTagsInput').value.replace(" ","+"));
   });
 
-  d3.select("#currenttags").select("button").remove();
+  d3.select("#currenttags").select("a").remove();
   if (T!="")
     {
       var mycurrenttags = T.split(",");
 
-      d3.select("#currenttags").selectAll("button")
+      d3.select("#currenttags").selectAll("a")
         .data(mycurrenttags).enter()
-        .append("button").attr("class","btn btn-small").text( function(d) {return d;} );
+        .append("a").attr("class","btn btn-small").text( function(d) {return d;} )
+	.on("mouseover", function(d){ d3.select(this).classed("btn-danger",true)})
+	.on("mouseout", function(d){ d3.select(this).classed("btn-danger",false)})
+	.attr("href", function(d) { return removeTag(T.split(","),d) });
     };
 }
+
+function removeTag(alltags,removetag)
+{
+    /* return a link to a page with 'removetag' removed from the array of tags*/
+    var index = alltags.indexOf(removetag);
+    alltags.splice(index, 1);
+    if (alltags.length)
+	return webbase+'/tag/'+alltags.join(",");
+    else
+	return webbase;
+}
+
 
 function load_content() {
   // d3.select(".debug").text("T,P,N = *"+T+"* *"+page+"* *"+N+"*");
