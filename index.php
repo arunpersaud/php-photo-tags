@@ -75,7 +75,7 @@ function autoversion($file)
   <datalist id="MyTags">
   </datalist>
  <p> Current tags:<span id="currenttags"></span>
-  <button class="next btn btn-small btn-info" onclick="tagcloud()">tag cloud</button>
+  <a class="next btn btn-small btn-info" onclick="tagcloud()">tag cloud</a>
   <a class="btn btn-small btn-success" href='<?php echo $webbase?>'>all</a>
  </p>
 </form>
