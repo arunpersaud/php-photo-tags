@@ -60,18 +60,41 @@ function load_content() {
       /* if ID is set, just show one pictures, else create an array of pictures */
       if (ID>=0)
 	{
-	  var singlepicspace=pics.selectAll("li").data(picdata, function(d){return ID;}).enter().append("li").append("div").attr("class","singlepic");
-	  singlepicspace.append("img").attr("class","left").attr("src",webbase+"/icons/left.png");
-	  singlepicspace.append("img")
-	    .attr("class","large")
-	    .attr("src",function(d) {
-		s = d.base_uri+'/'+d.filename;
-		s = s.replace('file:\/\/'+dbprefix,webbase+'/Photos-small/');
-		return s;
-	      });
-	  singlepicspace.append("img").attr("class","right").attr("src",webbase+"/icons/right.png");
+	    var singlepicspace=pics.selectAll("li").data(picdata, function(d){return ID;}).
+		enter().append("li").append("div").attr("class","singlepic");
+	    singlepicspace.append("img").attr("class","left").attr("src",webbase+"/icons/left.png");
+	    singlepicspace.append("img")
+		.attr("class","large")
+		.attr("src",function(d) {
+		    s = d.base_uri+'/'+d.filename;
+		    s = s.replace('file:\/\/'+dbprefix,webbase+'/Photos-small/');
+		    return s;
+		});
+	    singlepicspace.append("img").attr("class","right").attr("src",webbase+"/icons/right.png");
+	    /* show description and time of photo */
+	    singlepicspace.append("p")
+		.text(function(d) {
+		    var date = new Date(d.time*1000);
+		    if (d.description=="")
+			return "Time: "+date.toUTCString();
+		    else
+			return "Description: "+d.description + "Time: "+date.toUTCString();
+		});
+	    /* show tags */
+	    tags="";
+	    d3.json(webbase+"/getjson.php?IDT="+ID, function(jsontag) {
+		singlepicspace.append("p").selectAll("span").data(jsontag)
+		    .enter().append("span")
+		    .attr("class","btn btn-small")
+		    .text( function(t) {
+			return t.name;
+		    })
+		    .on("mouseover", function(d){ d3.select(this).classed("btn-danger",true)})
+		    .on("mouseout", function(d){ d3.select(this).classed("btn-danger",false)})
+		    .on("click", function(d) { document.location.href=webbase+'/tag/'+d.name});
+	    });
 
-	  update_thumbnails();
+	    update_thumbnails();
 	}
       else
 	{

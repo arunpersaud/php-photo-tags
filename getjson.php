@@ -67,8 +67,15 @@ if (isset($_REQUEST["S"]))
  else if (isset($_REQUEST["ID"]) && !isset($_REQUEST["C"]))
   {
     $id  = intval($_REQUEST["ID"]);
-    $result = $DB->query("SELECT base_uri, filename, id FROM photos".
+    $result = $DB->query("SELECT base_uri, filename, id, description, time FROM photos".
 			 " WHERE id=$id");
+  }
+ else if (isset($_REQUEST["IDT"]))
+   {  /* tags of a single image */
+    $id  = intval($_REQUEST["IDT"]);
+    $result = $DB->query("SELECT t.name as name FROM photo_tags pt ".
+			 " LEFT JOIN tags t on t.id=pt.tag_id".
+			 " WHERE pt.photo_id=$id");
   }
  else if (isset($_REQUEST["CLOUD"]))
   {
