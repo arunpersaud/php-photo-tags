@@ -19,12 +19,23 @@ dbprefix=${dbprefix//\//\\\/}
 
 
 function usage () {
-    echo "TODO: use comma seperate tags for --include=... and/or --exclude=..."
+    echo <<EOF
+f-spot-db-reduce.sh <options>
+
+The script uses config.ini for most of it's input data.
+
+Options:
+     --include=<comma separated taglist>      include pictures with these tags
+     --exclude=<comma separated taglist>      remove pictures with these tags
+     --hide=<comma separated taglist>         remove these tags, but leave pictures
+EOF
+
 }
 
 # parse command line
 CL_INCLUDE=""
 CL_EXCLUDE=""
+CL_HIDE=""
 
 for i in "$@"; do
     case $i in
@@ -33,6 +44,9 @@ for i in "$@"; do
 	   ;;
 	--exclude=*)
 	   CL_EXCLUDE=${i#*=}
+	   ;;
+	--hide=*)
+	   CL_HIDE=${i#*=}
 	   ;;
 	-h|--help)
 	   usage
@@ -53,6 +67,7 @@ fi
 # join tags together in a list of comma seperated quoted strings, so that they can be used in DB queries
 INCLUDE="'${CL_INCLUDE/,/','}'"
 EXCLUDE="'${CL_EXCLUDE/,/','}'"
+HIDE="'${CL_HIDE/,/','}'"
 
 if [ "x$INCLUDE" != "x" ] ; then
     echo "only including pictures with tags: $INCLUDE"
@@ -60,6 +75,10 @@ fi
 
 if [ "x$EXCLUDE" != "x" ] ; then
     echo "excluding all pictures with tags: $EXCLUDE"
+fi
+
+if [ "x$HIDE" != "x" ] ; then
+    echo "removing tags: $HIDE"
 fi
 
 if [ "x$EXCLUDE" == "x" -a "x$INCLUDE" == "x" ] ; then
@@ -79,11 +98,18 @@ if [ "x$EXCLUDE" != "x" ] ; then
     ExcludeTags="insert into rmphotoids select photo_id from photo_tags where tag_id in (select id from tags where name in ($EXCLUDE));"
 fi
 
+HideTags=""
+if [ "x$HIDE" != "x" ] ; then
+    HideTags="delete from photo_tags where tag_id in (select id from tags where name in ($HIDE));
+              delete from tags where name in ($HIDE);"
+fi
+
 # delete all photo related information that we don't want to keep in case INCLUDE tags were given
 sqlite3 $LOCALDB <<EOF
 create temp table rmphotoids as select id from photos where id not in (select photo_id from photo_tags where tag_id in (select id from tags where name in ($INCLUDE)));
 
 $ExcludeTags
+$HideTags
 
 delete from photos where id in (select * from rmphotoids);
 delete from photo_tags where photo_id in (select * from rmphotoids);
