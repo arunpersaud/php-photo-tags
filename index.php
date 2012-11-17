@@ -88,8 +88,8 @@ function autoversion($file)
 <div class="pics"><ul></ul> </div>
 
 <footer>
-  This gallery belongs to <?php echo htmlspecialchars($admin) ?>.
-  <div class="copyright"> photo-tags: copyright 2011 Arun Persaud arun@nubati.net, code available at <a href="http://source.nubati.net/projects/photo-tags">source.nubati.net/projects/photo-tags</a></div>
+  <div class="pull-left">This gallery belongs to <?php echo htmlspecialchars($admin) ?>.</div>
+  <div class="copyright pull-right"> photo-tags: copyright 2011 Arun Persaud arun@nubati.net,<br /> code available at <a href="http://source.nubati.net/projects/photo-tags">source.nubati.net/projects/photo-tags</a></div>
 </footer>
 
 
