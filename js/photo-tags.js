@@ -89,8 +89,8 @@ function load_content() {
 		    .text( function(t) {
 			return t.name;
 		    })
-		    .on("mouseover", function(d){ d3.select(this).classed("btn-danger",true)})
-		    .on("mouseout", function(d){ d3.select(this).classed("btn-danger",false)})
+		    .on("mouseover", function(d){ d3.select(this).classed("btn-success",true)})
+		    .on("mouseout", function(d){ d3.select(this).classed("btn-success",false)})
 		    .on("click", function(d) { document.location.href=webbase+'/tag/'+d.name});
 	    });
 
