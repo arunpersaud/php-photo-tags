@@ -143,16 +143,9 @@ function next_page() {
     update_page_index();
 }
 
-function prev_pic() {
-}
-
-function next_pic() {
-}
-
 function load_pic(myid) {
   ID=myid;
   update_page_index();
-  update_thumbnails();
   load_content();
 }
 
@@ -218,12 +211,13 @@ function update_thumbnails(){
 
       /* resort elements */
       d3.select(".nextprev").select("ul").selectAll("li").sort(function(a,b){return a.id-b.id;});
-      d3.select(".nextprev").select("ul").selectAll("li").select("a").select("img").classed("current",function(d){return (d.id==IDcurr);});
+      d3.select(".nextprev").select("ul").selectAll("li").select("a").select("img")
+	  .classed("current",function(d){return (d.id==IDcurr);});
 
 
       /* add links for left/right arrows */
       if (IDprev != -1 )
-	d3.select(".left").on("click", function() { load_pic(IDprev); });
+	  d3.select(".left" ).on("click", function() { load_pic(IDprev); });
       if (IDnext != -1 )
 	d3.select(".right").on("click", function() { load_pic(IDnext); });
 
