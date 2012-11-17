@@ -219,9 +219,15 @@ function update_thumbnails(){
       if (IDprev != -1 )
 	  d3.select(".left" ).on("click", function() { load_pic(IDprev); });
       if (IDnext != -1 )
-	d3.select(".right").on("click", function() { load_pic(IDnext); });
+	  d3.select(".right").on("click", function() { load_pic(IDnext); });
 
-    });
+      /* keyboard shortcuts */
+      $(document)
+	  .keydown(  function (e) {
+	      if(e.which == 37 && IDprev != -1) { $(document).unbind('keydown'); load_pic(IDprev);  }
+	      if(e.which == 39 && IDnext != -1) { $(document).unbind('keydown'); load_pic(IDnext);  }
+	  });
+  });
 }
 
 function checkbutton()
