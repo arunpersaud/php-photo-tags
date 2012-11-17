@@ -71,13 +71,15 @@ function autoversion($file)
 
 <div class="tagsearch">
 <form class="form-search" method="get" action="">
- <label>Search for tag:</label> <input class="input-medium search-query" list="MyTags" id="MyTagsInput" type="text" value="" />
-  <datalist id="MyTags">
-  </datalist>
- <p> Current tags:<span id="currenttags"></span>
-  <a class="next btn btn-small btn-info" onclick="tagcloud()">tag cloud</a>
-  <a class="btn btn-small btn-success" href='<?php echo $webbase?>'>all</a>
- </p>
+  <p>
+    <label>Search for tag:</label> <input class="input-medium search-query" list="MyTags" id="MyTagsInput" type="text" value="" />
+    <datalist id="MyTags">
+    </datalist>
+    Current tags:<span id="currenttags"></span>
+    <a class="next btn btn-small btn-info" onclick="tagcloud()">tag cloud</a>
+    <a class="btn btn-small btn-success" href='<?php echo $webbase?>'>all</a>
+    <span id="pictags"></span>
+  </p>
 </form>
 </div>
 

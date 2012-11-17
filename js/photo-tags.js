@@ -81,17 +81,21 @@ function load_content() {
 			return "Description: "+d.description + "Time: "+date.toUTCString();
 		});
 	    /* show tags */
-	    tags="";
 	    d3.json(webbase+"/getjson.php?IDT="+ID, function(jsontag) {
-		singlepicspace.append("p").selectAll("span").data(jsontag)
+		tags=0;
+		d3.select("#pictags").selectAll("span").remove();
+		d3.select("#pictags").selectAll("span").data(jsontag)
 		    .enter().append("span")
 		    .attr("class","btn btn-small")
 		    .text( function(t) {
+			tags=1;
 			return t.name;
 		    })
 		    .on("mouseover", function(d){ d3.select(this).classed("btn-success",true)})
-		    .on("mouseout", function(d){ d3.select(this).classed("btn-success",false)})
-		    .on("click", function(d) { document.location.href=webbase+'/tag/'+d.name});
+		    .on("mouseout",  function(d){ d3.select(this).classed("btn-success",false)})
+		    .on("click",     function(d){ document.location.href=webbase+'/tag/'+d.name});
+		if(tags)
+		d3.select("#pictags").insert("span",":first-child").text("tags in current picture:");
 	    });
 
 	    update_thumbnails();
