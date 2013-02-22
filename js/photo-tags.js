@@ -96,9 +96,9 @@ function load_content() {
 		.text(function(d) {
 		    var date = new Date(d.time*1000);
 		    if (d.description=="")
-			return "Time: "+date.toUTCString();
+			return " "+date.toUTCString();
 		    else
-			return "Description: "+d.description + "Time: "+date.toUTCString();
+			return " "+d.description + " "+date.toUTCString();
 		});
 	    /* show tags */
 	    d3.json(webbase+"/getjson.php?IDT="+ID, function(jsontag) {
