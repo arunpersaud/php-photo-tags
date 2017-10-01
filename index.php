@@ -1,22 +1,22 @@
 <?php
 
   /**
-    copyright 2012,2013 Arun Persaud <arun@nubati.net>
+    copyright 2012,2013,2017 Arun Persaud <arun@nubati.net>
 
-    This file is part of photo-tags.
+    This file is part of Php-photo-tags.
 
-    Photo-tags is free software: you can redistribute it and/or modify
+    Php-photo-tags is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    Photo-tags is distributed in the hope that it will be useful,
+    Php-hoto-tags is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Photo-tags.  If not, see <http://www.gnu.org/licenses/>.
+    along with Php-photo-tags.  If not, see <http://www.gnu.org/licenses/>.
 
   **/
 
@@ -110,7 +110,7 @@ function autoversion($file)
 
 <footer>
   <div class="pull-left">This gallery belongs to <?php echo htmlspecialchars($admin) ?>.</div>
-  <div class="copyright pull-right"> photo-tags: copyright 2011-2012 Arun Persaud arun@nubati.net,<br /> code available at <a href="http://source.nubati.net/projects/photo-tags">source.nubati.net/projects/photo-tags</a></div>
+  <div class="copyright pull-right"> php-photo-tags: copyright 2011,2012,2017 Arun Persaud arun@nubati.net,<br /> code available at <a href="https://github.com/arunpersaud/php-photo-tags">php-photo-tags@github</a></div>
 </footer>
 
 

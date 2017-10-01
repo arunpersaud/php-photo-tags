@@ -1,22 +1,22 @@
 <?php
 
   /**
-    copyright 2012,2013 Arun Persaud <arun@nubati.net>
+    copyright 2012,2013,2017 Arun Persaud <arun@nubati.net>
 
-    This file is part of photo-tags.
+    This file is part of Php-photo-tags.
 
-    Photo-tags is free software: you can redistribute it and/or modify
+    Php-photo-tags is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    Photo-tags is distributed in the hope that it will be useful,
+    Php-photo-tags is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Photo-tags.  If not, see <http://www.gnu.org/licenses/>.
+    along with Php-hoto-tags.  If not, see <http://www.gnu.org/licenses/>.
 
   **/
 
@@ -46,7 +46,7 @@ if (isset($_REQUEST["S"]))
  else if (isset($_REQUEST["NP"]))
   {
     /* get +- 3 pics from ordered list to show next to a large image */
-
+x
     /* first create a temp table with all images and then use rowid to get +-5 images */
 
     if (isset($_REQUEST["T"]))
